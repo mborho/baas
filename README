@@ -1,3 +1,17 @@
+Buddy as a Service (baas) is a jabber bot, using BOSS Mashup Framework.
+
 - install Yahoo Boss Mashup Framework ( http://developer.yahoo.com/search/boss/mashup.html )
 - install Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
 
+usage:
+
+type 'help:list' for available commands
+
+Available commands:
+bm:tag - searches bm.doomicile
+news:word - searches for news
+web:word - websearch
+
+Some commands (news,web) can be combined with #de, examples:
+news:hamburg #de
+web:xmpp #de
