@@ -1,0 +1,9 @@
+{"appid": "BossDemo",
+ "email": "boss-feedback@yahoo-inc.com",
+ "org": "Yahoo! Inc.",
+ "agent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1) Gecko/20061010 Firefox/2.0",
+ "commercial": false,
+ "purpose": "To create the best search experience ever",
+ "version": "1.0",
+ "uri": "http://boss.yahooapis.com/ysearch/"
+}
