@@ -5,6 +5,13 @@ from baas.core.plugins import Plugin
 
 class Doomicile(Plugin):
 
+    def get_map(self):
+        cmd_map = [('bm',self.search_bookmarks)]
+        return cmd_map
+
+    def get_help(self):
+        return {'commands':['bm:tag - searches bm.doomicile'],'additional':[]}
+
     def search_bookmarks(self, term):
         '''
         searches web by yahoo

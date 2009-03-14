@@ -6,7 +6,7 @@ import ConfigParser
 from twisted.words.protocols.jabber import client, jid
 from twisted.words.xish import domish, xmlstream
 from twisted.internet import reactor
-from baas.plugins import help, doomicile, boss
+from baas.core.plugins import PluginLoader
 
 ########################### helpers ##############################################
 def getTraceback():
@@ -14,13 +14,11 @@ def getTraceback():
     e_tb   = "".join(traceback.format_tb(e_info[2]))
     return ' Error Type: '+str(e_info[0])+'\nError Value: '+str(e_info[1])+'\nTraceback:\n'+e_tb+'\n'
 
-commands={
-    #'s': boss.Boss().search,
-    'help': help.Help().man,
-    'web': boss.Boss().search_web,
-    'news': boss.Boss().search_news,
-    'bm': doomicile.Doomicile().search_bookmarks,
-}
+pluginHnd = PluginLoader()
+pluginHnd.load_plugins()
+pluginHnd.load_map()
+pluginHnd.load_help()
+commands= pluginHnd.commands
 
 class Bot(object):
 
@@ -52,18 +50,21 @@ class Bot(object):
                 break
 
 
-        reply = "type 'help:list' for available commands"
+        reply = "type 'help' for available commands"
 
         try:
+
             if text and text.find(':')+1:
                 cmd,args=text.split(':',1)
                 commando_func = commands.get(cmd)
                 if commando_func:
                     result_msg = commando_func(args)
-                    #print result_msg
                     reply = result_msg
                 else:
                     reply = 'Uups, commando not known\n'
+            elif text and text == 'help':
+                reply += "\n\n%s" % pluginHnd.help
+
         except:
             reply = getTraceback()
 
