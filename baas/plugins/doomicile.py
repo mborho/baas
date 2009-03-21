@@ -33,7 +33,10 @@ class Doomicile(Plugin):
         if bm.rows:
             for row in bm.rows[0:5]:
                 desc = row["bm$description"]+"\n" if len(row["bm$description"]) > 0 else ''
-                result += '%s\n%s\n%s\n' % (row["bm$title"], row["bm$link"], desc)
+                result += '* %s' % row["bm$title"]
+                if desc != '':
+                    result += ': %s' % desc
+                result += ' %s\n' % row["bm$link"]
         else:
             result += 'No sites found!'
         return self.strip_tags(result)

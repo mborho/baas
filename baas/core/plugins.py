@@ -69,6 +69,9 @@ class Plugin(object):
         """
         return re.sub(r'<[^>]*?>', '', value)        
 
+    def overlap_link(self, r1, r2):
+        return r1['link'].strip() == r2['link'].strip()
+
     def overlap_predicate(self, r1, r2):
         """
             helper method for yahoo mashup framework
