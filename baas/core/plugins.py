@@ -3,6 +3,7 @@
 import re
 import os
 import new
+from util import text
 from baas import plugins
 
 class PluginLoader(object):
@@ -70,10 +71,13 @@ class Plugin(object):
         return re.sub(r'<[^>]*?>', '', value)        
 
     def overlap_link(self, r1, r2):
+        """
+            overlaps rows by link
+        """
         return r1['link'].strip() == r2['link'].strip()
 
-    def overlap_predicate(self, r1, r2):
+    def overlap_title(self, r1, r2):
         """
-            helper method for yahoo mashup framework
+            overlaps rows by title
         """
         return text.overlap(r1["title"], r2["title"]) > 1

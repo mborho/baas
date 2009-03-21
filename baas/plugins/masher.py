@@ -22,7 +22,7 @@ class Masher (Plugin):
         """
     
         return {
-            'commands': ['hot:tech - scratches hot news from various sources'],
+            'commands': ['hot:links - looks up what\'s hot on reddit and delicious'],
             'additional': [],
         }
 
@@ -72,30 +72,26 @@ class Masher (Plugin):
 
         result = ''
         pages = None
-        if what == "tech":
+        if what == "links":
             # thanks, http://lethain.com/entry/2008/jul/12/stripping-reddit-from-hackernews-with-boss-mashup/
             ycomb = db.create(name="y",url="http://news.ycombinator.com/rss")
             _ycomb = db.select(udf=udfs.unnest_value,table=ycomb)
             _ycomb = db.select(udf=self.normalize_ycomb,table=_ycomb)
-            #print _ycomb.rows[0]
-            #print __ycomb.rows[0]
 
-            #reddit = db.create(name="r",url="http://www.reddit.com/.rss")
-            #_reddit = db.select(udf=udfs.unnest_value,table=reddit)
-            #_reddit = db.select(udf=self.normalize_reddit,table=_reddit)
-            #print _reddit.rows[0:2]
-            #print __reddit.rows[0:2]
+            reddit = db.create(name="r",url="http://www.reddit.com/.rss?limit=50")
+            _reddit = db.select(udf=udfs.unnest_value,table=reddit)
+            _reddit = db.select(udf=self.normalize_reddit,table=_reddit)
 
-            deli = db.create(name="d",url="http://feeds.delicious.com/v2/rss/?count=50")
-            _deli = db.select(udf=udfs.unnest_value,table=deli)
-            _deli = db.select(udf=self.normalize_deli,table=_deli)
-            #print _deli.rows[0:2]
+            #deli = db.create(name="d",url="http://feeds.delicious.com/v2/rss/?count=50")
+            #_deli = db.select(udf=udfs.unnest_value,table=deli)
+            #_deli = db.select(udf=self.normalize_deli,table=_deli)
 
-            pages = db.join(self.overlap_link, [_ycomb, _deli])
+            pages = db.join(self.overlap_link, [_reddit, _ycomb])
+
 
         if pages:
-            result = 'Hot %s news' % what
+            result = 'Hot %s news\n' % what
             for row in pages.rows:
-                result += '%s - %s\n' % (row["y$title"], row["d$link"])
+                result += '%s - %s\n' % (row["y$title"], row["y$link"])
 
         return result
