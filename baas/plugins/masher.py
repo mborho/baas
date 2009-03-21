@@ -3,6 +3,7 @@ import re
 from urllib import quote_plus
 from util import text, console
 from yos.yql import db, udfs
+from yos.boss import ysearch
 from baas.core.plugins import Plugin
 
 REDDIT_LINK_REGEX = re.compile(r'<a href="(?P<url>[^\"]*?)">\[link\]</a>')
@@ -13,7 +14,10 @@ class Masher (Plugin):
         """
             returns the command map for the plugin
         """
-        cmd_map = [('hot',self.combine_hot)]
+        cmd_map = [
+            ('hot', self.combine_hot),
+            ('popnews', self.rank_news_by_social)
+        ]
         return cmd_map
 
     def get_help(self):
@@ -22,7 +26,10 @@ class Masher (Plugin):
         """
     
         return {
-            'commands': ['hot:links - looks up what\'s hot on reddit and delicious'],
+            'commands': [
+                'hot:links - looks up what\'s hot on reddit and delicious',
+                'popnews:word - popular ranked news for searchterm',
+            ],
             'additional': [],
         }
 
@@ -68,7 +75,6 @@ class Masher (Plugin):
         if what == '':
             return "Which hotness do you mean?"
 
-        result = ''
         pages = None
         if what == "links":
             # thanks, http://lethain.com/entry/2008/jul/12/stripping-reddit-from-hackernews-with-boss-mashup/
@@ -85,11 +91,55 @@ class Masher (Plugin):
             #_deli = db.select(udf=self.normalize_deli,table=_deli)
 
             pages = db.join(self.overlap_link, [_reddit, _ycomb])
+        
 
-
-        if pages:
             result = 'Hot %s\n' % what
-            for row in pages.rows:
-                result += '%s - %s\n' % (row["y$title"], row["y$link"])
+            if pages:
+                for row in pages.rows:
+                    result += '%s - %s\n' % (row["y$title"], row["y$link"])
+            else:
+                result += 'No sites found!'
+        else:
+            result = "Function not implemented by now"
+        return result
+
+    def socialf(self, row):
+        #row.update({"social": row["dg$diggs"] + row["yt$favorites"]}) ; return row
+        row.update({"social": row["dg$diggs"]}) ; return row
+
+    def rank_news_by_social(self, term):
+        '''
+            example 4 of the YMF Examples
+        '''
+        term = term.strip()
+        if term == '':
+            return "Please specify your search term"
+
+        ynews_data = ysearch.search(term, vertical="news", count=100, more={"news.ranking": "date"})
+        ynews = db.create(name="ynews", data=ynews_data)
+        ynews.rename(before="headline", after="title")
+
+        smf = lambda r: {"title": r["title"]["value"]}
+        sm = db.select(name="sm", udf=smf, url="http://search.twitter.com/search.atom?lang=en&q="+quote_plus(term)+"&rpp=60")
+        #sm.rename(before="text", after="title")
+
+        #ytf = lambda r: {"title": r["title"]["value"], "favorites": int(r["statistics"]["favoriteCount"])}
+        #yt = db.select(name="yt", udf=ytf, url="http://gdata.youtube.com/feeds/api/videos?vq="+quote_plus(term)+"&lr=en&orderby=published")
+
+        diggf = lambda r: {"title": r["title"]["value"], "diggs": int(r["diggCount"]["value"])}
+        digg = db.select(name="dg", udf=diggf, url="http://digg.com/rss_search?search="+quote_plus(term)+"&area=dig&type=both&section=news")
+
+        tb = db.join(self.overlap_title, [ynews, sm, digg])#, yt])
+
+        tb = db.select(udf=self.socialf, table=tb)
+        tb = db.group(by=["ynews$title"], key="social", reducer=lambda d1,d2: d1+d2, as="rank", table=tb, norm=text.norm)
+        tb = db.sort(key="rank", table=tb)
+
+        result = 'Popular news for "%s"\n' % term
+        if tb.rows:
+            for row in tb.rows:
+                result += '(%s) %s %s (%d)\n' % (row['ynews$date'], row["ynews$title"], row["ynews$url"], row['rank'])
+        else:
+            result = 'No sites found!'
 
         return result

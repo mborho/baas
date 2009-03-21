@@ -80,4 +80,4 @@ class Plugin(object):
         """
             overlaps rows by title
         """
-        return text.overlap(r1["title"], r2["title"]) > 1
+        return text.overlap(r1["title"], r2["title"]) > 2

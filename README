@@ -8,6 +8,7 @@ usage:
 type 'help' for available commands
 
 Available commands:
+hot:links - looks up what's hot on reddit and delicious
 bm:tag - searches bm.doomicile
 news:word - searches for news
 web:word - websearch
