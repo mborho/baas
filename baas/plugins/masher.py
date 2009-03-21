@@ -88,7 +88,7 @@ class Masher (Plugin):
 
 
         if pages:
-            result = 'Hot %s news\n' % what
+            result = 'Hot %s\n' % what
             for row in pages.rows:
                 result += '%s - %s\n' % (row["y$title"], row["y$link"])
 
