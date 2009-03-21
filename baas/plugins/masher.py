@@ -49,7 +49,6 @@ class Masher (Plugin):
             grabs link out if reddit description 
         '''
         m = REDDIT_LINK_REGEX.search(desc)
-        #print m.groups()
         if not m: return ''
         return m.group('url')
 
@@ -58,7 +57,6 @@ class Masher (Plugin):
             normalizes ycombinator results
         '''
         result = {}
-        #print row
         result['title'] = row['d$title']
         result['link'] = row['d$link']
         return result
