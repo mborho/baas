@@ -13,12 +13,18 @@ class PluginLoader(object):
         self.commands = {}
 
     def load_plugins(self):
+        """
+            loads the plugins from the plugin dir
+        """
         for file in os.listdir(plugins.__path__[0]):
             file_parts = os.path.splitext(file)
             if  file_parts[1] == '.py' and file[0:2] != '__':
                 self.plugins[file_parts[0].capitalize()] = getattr(__import__('baas.plugins.'+file_parts[0], globals(), locals(),[file_parts[0].capitalize()]),file_parts[0].capitalize())()
 
     def load_map(self):
+        """
+            combines command map
+        """
         for name in self.plugins:
             cmd_map = self.plugins[name].get_map()
             if cmd_map:
@@ -26,6 +32,9 @@ class PluginLoader(object):
                     self.commands[cmd] = func
 
     def load_help(self):
+        """
+            combines help text, retrieved from the plugins
+        """
         help_infos = {}
         help_list = []
         help_additional = []
@@ -54,21 +63,14 @@ class Plugin(object):
     def get_help(self):
         return None
 
-    def test(self):
-        print "test"
-            #if os.path.fileext(file) == "py": print "kjhK"
-        #className = className.capitalize()
-        #try:
-            ##pluginClass = __import__(__name__, None, None,['Importer.plugins'])
-            ##aClass = pluginClass.__getattribute__(className)
-            #aClass = getattr(__import__(__name__,globals(),locals(),['Importer.plugins']),className)
-            #return apply(aClass, args)
-        #except:
-            #return None
-
     def strip_tags(self, value):
         """
             Return the given HTML with all tags stripped.
         """
         return re.sub(r'<[^>]*?>', '', value)        
 
+    def overlap_predicate(self, r1, r2):
+        """
+            helper method for yahoo mashup framework
+        """
+        return text.overlap(r1["title"], r2["title"]) > 1

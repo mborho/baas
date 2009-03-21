@@ -5,7 +5,7 @@ Buddy as a Service (baas) is a jabber bot, using BOSS Mashup Framework.
 
 usage:
 
-type 'help:list' for available commands
+type 'help' for available commands
 
 Available commands:
 bm:tag - searches bm.doomicile

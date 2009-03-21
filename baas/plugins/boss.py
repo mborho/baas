@@ -9,10 +9,16 @@ from baas.core.plugins import Plugin
 class Boss (Plugin):
 
     def get_map(self):
+        """
+            returns the command map for the plugin
+        """
         cmd_map = [('news',self.search_news), ('web', self.search_web)]
         return cmd_map
 
     def get_help(self):
+        """
+            returns the help text for the plugin
+        """
         additional = '''
 Some commands (news,web) can be combined with #de, examples:
 news:hamburg #de
@@ -22,9 +28,6 @@ web:xmpp #de'''
             'commands': ['news:word - searches for news','web:word - websearch'],
             'additional': [additional],
         }
-
-    def overlap_predicate(self, r1, r2):
-        return text.overlap(r1["title"], r2["title"]) > 1
 
     def search_web(self, term):
         '''
