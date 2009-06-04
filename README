@@ -7,9 +7,10 @@ usage:
 
 type 'help' for available commands
 
-Available commands:
 hot:links - looks up what's hot on reddit and delicious
+popnews:word - popular ranked news for searchterm
 bm:tag - searches bm.doomicile
+example:foo - gives you a bla for a foo
 news:word - searches for news
 web:word - websearch
 
