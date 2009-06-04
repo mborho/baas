@@ -127,7 +127,7 @@ class Masher (Plugin):
         #yt = db.select(name="yt", udf=ytf, url="http://gdata.youtube.com/feeds/api/videos?vq="+quote_plus(term)+"&lr=en&orderby=published")
 
         diggf = lambda r: {"title": r["title"]["value"], "diggs": int(r["diggCount"]["value"])}
-        digg = db.select(name="dg", udf=diggf, url="http://digg.com/rss_search?search="+quote_plus(term)+"&area=dig&type=both&section=news")
+        digg = db.select(name="dg", udf=diggf, url="http://digg.com/rss_search?s="+quote_plus(term)+"&area=dig&type=both&section=news")
 
         tb = db.join(self.overlap_title, [ynews, sm, digg])#, yt])
 
