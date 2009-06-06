@@ -1,4 +1,6 @@
-Buddy as a Service (baas) is a jabber bot, using BOSS Mashup Framework.
+Buddy as a Service (baas) is a jabber bot, using Yahoo Boss Mashup Framework, Google API and other services to do some stuff for you.
+
+requirements:
 
 - install Yahoo Boss Mashup Framework ( http://developer.yahoo.com/search/boss/mashup.html )
 - install Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
