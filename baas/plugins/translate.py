@@ -30,7 +30,8 @@ tlate:How do you do? #de'''
         result = ''
         detected_lang = None
         try:
-            api_url = 'http://www.google.com/uds/Gtranslate?context=22&q=%s&langpair=|%s&key=notsupplied&v=1.0' % (quote_plus(term.encode('utf-8')), target_lang)
+            url_term = quote_plus(term.encode('utf-8').lower())
+            api_url = 'http://www.google.com/uds/Gtranslate?context=22&q=%s&langpair=|%s&key=notsupplied&v=1.0' % (url_term, target_lang)
             req = urllib2.Request(api_url)
             response = urllib2.urlopen(req).read()
             api_response  = simplejson.loads(response)
