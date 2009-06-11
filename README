@@ -13,13 +13,19 @@ usage:
 
 type 'help' for available commands
 
+news:word - searches for news
+web:word - websearch
+blog:word - blog search via twingly
+micro:word - microblog search via twingly
 hot:links - looks up what's hot on reddit and delicious
 popnews:word - popular ranked news for searchterm
 tlate:word #en - translates the word in german in english, #LANG sepcifies the target lang
 bm:tag - searches bm.doomicile
 example:foo - gives you a bla for a foo
-news:word - searches for news
-web:word - websearch
+
+Some commands (news,web) can be combined with #de, examples:
+news:hamburg #de
+web:xmpp #de
 
 A translation needs the target language specified by a hashtag
 tlate:Wie gehts?  #en
