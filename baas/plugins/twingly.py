@@ -31,7 +31,7 @@ class Twingly(Plugin):
             for row in items.rows[0:5]:
                 desc = row["bm$description"]+"\n" if len(row["bm$description"]) > 0 else ''
                 result += '* %s' % row["bm$title"]
-                if desc != '':
+                if desc != '' and content== 'blog':
                     result += ': %s' % desc
                 result += ' %s\n' % row["bm$link"]
             #result = result.replace('&hellip;','...')
