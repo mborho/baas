@@ -24,9 +24,9 @@ class Twingly(Plugin):
         if term == '':
             return "Please specify your search term"
 
-        twingly_rss = "http://www.twingly.com/search.rss?q=%s&sort=published&content=%s"  % (quote_plus(term), content)
+        twingly_rss = "http://www.twingly.com/search.rss?q=%s&sort=published&content=%s"  % (quote_plus(term.encode('utf-8')), content)
         items = db.select(name="bm", udf=udfs.unnest_value, url=twingly_rss)
-        result = 'Searching bookmarks for "%s"\n' % term
+        result = '%s search for "%s"\n' % (content, term)
         if items.rows:
             for row in items.rows[0:5]:
                 desc = row["bm$description"]+"\n" if len(row["bm$description"]) > 0 else ''
@@ -34,7 +34,8 @@ class Twingly(Plugin):
                 if desc != '':
                     result += ': %s' % desc
                 result += ' %s\n' % row["bm$link"]
-            result = result.replace('&hellip;','...')
+            #result = result.replace('&hellip;','...')
+            result = self.htmlentities_decode(result)
         else:
             result += 'No sites found!'
 

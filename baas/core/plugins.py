@@ -5,6 +5,9 @@ import os
 import new
 from util import text
 from baas import plugins
+from htmlentitydefs import name2codepoint as n2cp
+import re
+
 
 class PluginLoader(object):
 
@@ -81,3 +84,24 @@ class Plugin(object):
             overlaps rows by title
         """
         return text.overlap(r1["title"], r2["title"]) > 2
+
+    def substitute_entity(self, match):
+        ent = match.group(3)
+
+        if match.group(1) == "#":
+            if match.group(2) == '':
+                return unichr(int(ent))
+            elif match.group(2) == 'x':
+                return unichr(int('0x'+ent, 16))
+        else:
+            cp = n2cp.get(ent)
+
+            if cp:
+                return unichr(cp)
+            else:
+                return match.group()
+
+    def htmlentities_decode(self, string):
+        """ thanks to http://snippets.dzone.com/posts/show/4569 """
+        entity_re = re.compile(r'&(#?)(x?)(\d{1,5}|\w{1,8});')
+        return entity_re.subn(self.substitute_entity, string)[0]
