@@ -25,10 +25,15 @@ class Twingly(Plugin):
             return "Please specify your search term"
 
         twingly_rss = "http://www.twingly.com/search.rss?q=%s&sort=published&content=%s"  % (quote_plus(term.encode('utf-8')), content)
+
         items = db.select(name="bm", udf=udfs.unnest_value, url=twingly_rss)
         result = '%s search for "%s"\n' % (content, term)
+
+        if content == 'blog': limit = 5
+        else: limit = 10
+
         if items.rows:
-            for row in items.rows[0:5]:
+            for row in items.rows[0:limit]:
                 desc = row["bm$description"]+"\n" if len(row["bm$description"]) > 0 else ''
                 result += '* %s' % row["bm$title"]
                 if desc != '' and content== 'blog':
