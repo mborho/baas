@@ -15,6 +15,7 @@ type 'help' for available commands
 
 news:word - searches for news
 web:word - websearch
+blip:song - search for songs on blip.fm
 blog:word - blog search via twingly
 micro:word - microblog search via twingly
 hot:links - looks up what's hot on reddit and delicious

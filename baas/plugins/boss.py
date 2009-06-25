@@ -12,7 +12,7 @@ class Boss (Plugin):
         """
             returns the command map for the plugin
         """
-        cmd_map = [('news',self.search_news), ('web', self.search_web)]
+        cmd_map = [('news',self.search_news), ('web', self.search_web), ('blip',self.search_blip)]
         return cmd_map
 
     def get_help(self):
@@ -25,7 +25,7 @@ news:hamburg #de
 web:xmpp #de'''
 
         return {
-            'commands': ['news:word - searches for news','web:word - websearch'],
+            'commands': ['news:word - searches for news','web:word - websearch','blip:song - search for songs on blip.fm'],
             'additional': [additional],
         }
 
@@ -80,6 +80,27 @@ web:xmpp #de'''
             result += 'No sites found!'
         return self.strip_tags(result)
 
+    def search_blip(self, term):
+        '''
+        searches for blips on blip.fm
+        '''
+        term = term.strip()
+
+        if term == '':
+            return "Please specify your search term"
+        
+        yterm = 'intitle:%s site:%s' % (term.encode('utf-8'), 'blip.fm')
+        data = ysearch.search(yterm,count=10)
+        table = db.create(data=data)
+
+        result = 'Blips for "%s"\n' % term
+        if table.rows:
+            for row in table.rows:
+                result += "%s : %s\n" % (row['title'].replace('Blip.fm | ',''),row['url'])
+        else:
+            result += 'No blips found!'
+        return self.strip_tags(result)
+        
     def search_news_delicious(self, term):
         '''
         searches yahoo news and delicious popular links for gioven search term
