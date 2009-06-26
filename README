@@ -36,3 +36,8 @@ tlate:How do you do? #de
 Some commands (news,web) can be combined with #de, examples:
 news:hamburg #de
 web:xmpp #de
+
+***************************************************************
+****** Copyright 2009 Martin Borho <martin@borho.net> *********
+****** GPLv3 - see License.txt for details            *********
+***************************************************************

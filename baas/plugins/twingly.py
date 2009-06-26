@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright 2009 Martin Borho <martin@borho.net>
+# GPL - see License.txt for details
 from urllib import quote_plus
 from yos.yql import db, udfs
 from baas.core.plugins import Plugin
