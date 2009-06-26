@@ -89,8 +89,10 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
         
-        yterm = 'intitle:%s site:%s' % (term.encode('utf-8'), 'blip.fm')
-        data = ysearch.search(yterm,count=10)
+        term_utf8 = term.encode('utf-8')
+        yterm = 'intitle:%s site:blip.fm inurl:profile -intitle:"Props given" -intitle:"Favourite DJs" \
+                -intitle:"Blip.fm %s"' % (term_utf8, term_utf8)
+        data = ysearch.search(yterm,count=15)
         table = db.create(data=data)
 
         result = 'Blips for "%s"\n' % term
