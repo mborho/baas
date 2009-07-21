@@ -2,7 +2,6 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from urllib import quote_plus
-from yos.yql import db, udfs
 from baas.core.plugins import Plugin
 
 class Doomicile(Plugin):
@@ -29,16 +28,16 @@ class Doomicile(Plugin):
         if term == '':
             return "Please specify your search term"
 
-        bm = db.select(name="bm", udf=udfs.unnest_value, url="http://bm.doomicile.de/rss/all/"+quote_plus(term))
-
+        url="http://bm.doomicile.de/rss/all/"+quote_plus(term)
+        feed = self.load_feed(url)
         result = 'Searching bookmarks for "%s"\n' % term
-        if bm.rows:
-            for row in bm.rows[0:5]:
-                desc = row["bm$description"]+"\n" if len(row["bm$description"]) > 0 else ''
-                result += '* %s' % row["bm$title"]
+        if feed.entries:
+            for row in feed.entries[0:5]:
+                desc = row["summary"]+"\n" if len(row["summary"]) > 0 else ''
+                result += '* %s' % row["title"]
                 if desc != '':
                     result += ': %s' % desc
-                result += ' %s\n' % row["bm$link"]
+                result += ' %s\n' % row["link"]
         else:
             result += 'No sites found!'
         return self.strip_tags(result)

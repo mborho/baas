@@ -1,8 +1,8 @@
-Buddy as a Service (baas) is a jabber bot, using Yahoo Boss Mashup Framework, Google API and other services to do some stuff for you.
+Buddy as a Service (baas) is a jabber bot, using Yahoo Boss API, Google API and other services to do some stuff for you.
 
 requirements:
 
-- install Yahoo Boss Mashup Framework ( http://developer.yahoo.com/search/boss/mashup.html )
+- install Universal Feed Parser ( http://www.feedparser.org )
 - install Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
 
 demo:
@@ -16,13 +16,11 @@ type 'help' for available commands
 news:word - searches for news
 web:word - websearch
 blip:song - search for songs on blip.fm
-blog:word - blog search via twingly
-micro:word - microblog search via twingly
-hot:links - looks up what's hot on reddit and delicious
-popnews:word - popular ranked news for searchterm
 tlate:word #en - translates the word in german in english, #LANG sepcifies the target lang
 bm:tag - searches bm.doomicile
 example:foo - gives you a bla for a foo
+blog:word - blog search via twingly
+micro:word - microblog search via twingly
 
 Some commands (news,web) can be combined with #de, examples:
 news:hamburg #de
@@ -32,10 +30,6 @@ A translation needs the target language specified by a hashtag
 tlate:Wie gehts?  #en
 tlate:Wie gehts?  #es
 tlate:How do you do? #de
-
-Some commands (news,web) can be combined with #de, examples:
-news:hamburg #de
-web:xmpp #de
 
 ***************************************************************
 ****** Copyright 2009 Martin Borho <martin@borho.net> *********

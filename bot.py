@@ -16,7 +16,10 @@ def getTraceback():
     e_tb   = "".join(traceback.format_tb(e_info[2]))
     return ' Error Type: '+str(e_info[0])+'\nError Value: '+str(e_info[1])+'\nTraceback:\n'+e_tb+'\n'
 
-pluginHnd = PluginLoader()
+config = ConfigParser.ConfigParser()
+config.read("baas.cfg")
+
+pluginHnd = PluginLoader(config=config)
 pluginHnd.load_plugins()
 pluginHnd.load_map()
 pluginHnd.load_help()
@@ -100,6 +103,4 @@ class Bot(object):
         self.xmlstream = xmlstream
 
 if __name__ == "__main__":
-    config = ConfigParser.ConfigParser()
-    config.read("baas.cfg")
     bot = Bot(config)

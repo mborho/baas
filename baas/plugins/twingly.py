@@ -2,7 +2,6 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from urllib import quote_plus
-from yos.yql import db, udfs
 from baas.core.plugins import Plugin
 
 class Twingly(Plugin):
@@ -28,20 +27,19 @@ class Twingly(Plugin):
 
         twingly_rss = "http://www.twingly.com/search.rss?q=%s&sort=published&content=%s"  % (quote_plus(term.encode('utf-8')), content)
 
-        items = db.select(name="bm", udf=udfs.unnest_value, url=twingly_rss)
+        feed = self.load_feed(twingly_rss)
         result = '%s search for "%s"\n' % (content, term)
 
         if content == 'blog': limit = 5
         else: limit = 10
 
-        if items.rows:
-            for row in items.rows[0:limit]:
-                desc = row["bm$description"]+"\n" if len(row["bm$description"]) > 0 else ''
-                result += '* %s' % row["bm$title"]
+        if feed.entries:
+            for row in feed.entries[0:limit]:
+                desc = row["summary"]+"\n" if len(row["summary"]) > 0 else ''
+                result += '* %s' % row["title"]
                 if desc != '' and content== 'blog':
                     result += ': %s' % desc
-                result += ' %s\n' % row["bm$link"]
-            #result = result.replace('&hellip;','...')
+                result += '%s\n' % row["link"]
             result = self.htmlentities_decode(result)
         else:
             result += 'No sites found!'

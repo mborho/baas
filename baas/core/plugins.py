@@ -4,7 +4,7 @@
 import re
 import os
 import new
-from util import text
+import feedparser
 from baas import plugins
 from htmlentitydefs import name2codepoint as n2cp
 import re
@@ -12,7 +12,8 @@ import re
 
 class PluginLoader(object):
 
-    def __init__(self):
+    def __init__(self, config=None):
+	self.config = config
         self.plugins = {}
         self.help = ''
         self.commands = {}
@@ -24,7 +25,10 @@ class PluginLoader(object):
         for file in os.listdir(plugins.__path__[0]):
             file_parts = os.path.splitext(file)
             if  file_parts[1] == '.py' and file[0:2] != '__':
-                self.plugins[file_parts[0].capitalize()] = getattr(__import__('baas.plugins.'+file_parts[0], globals(), locals(),[file_parts[0].capitalize()]),file_parts[0].capitalize())()
+                self.plugins[file_parts[0].capitalize()] = \
+		getattr(__import__('baas.plugins.'+file_parts[0], globals(), \
+		locals(),[file_parts[0].capitalize()]), \
+		file_parts[0].capitalize())(config=self.config)
 
     def load_map(self):
         """
@@ -59,7 +63,8 @@ class PluginLoader(object):
 
 class Plugin(object):
 
-    def __init__(self):
+    def __init__(self, config):
+	self.config = config
         pass
 
     def get_map(self):
@@ -74,17 +79,11 @@ class Plugin(object):
         """
         return re.sub(r'<[^>]*?>', '', value)        
 
-    def overlap_link(self, r1, r2):
+    def load_feed(self, url):
         """
-            overlaps rows by link
+            loads extenal rss/atom feed
         """
-        return r1['link'].strip() == r2['link'].strip()
-
-    def overlap_title(self, r1, r2):
-        """
-            overlaps rows by title
-        """
-        return text.overlap(r1["title"], r2["title"]) > 2
+        return feedparser.parse(url)
 
     def substitute_entity(self, match):
         ent = match.group(3)

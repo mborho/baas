@@ -7,3 +7,6 @@ server = example.com
 port = 5222
 jid = user@example.com/baas
 pwd = password
+
+[boss]
+api_key=HERE_YOUR_BOSS_KEY

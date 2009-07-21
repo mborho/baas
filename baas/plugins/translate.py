@@ -4,8 +4,13 @@
 import re
 import urllib2
 from urllib import quote_plus
-import simplejson
 from baas.core.plugins import Plugin
+
+try:
+    # appengine
+    from django.utils import simplejson
+except:
+    import simplejson
 
 class Translate(Plugin):
 

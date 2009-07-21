@@ -2,9 +2,7 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from urllib import quote_plus
-from util import text, console
-from yos.boss import ysearch
-from yos.yql import db, udfs
+from baas.core.bossapi import BossApi
 from baas.core.plugins import Plugin
 
 class Boss (Plugin):
@@ -44,12 +42,15 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
-        data = ysearch.search(term,count=10,lang=lang,region=lang)
-        table = db.create(data=data)
+        yterm = term.encode('utf-8')
+        
+        boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
+        response = boss_api.web(query=yterm,count=10, lang=lang, region=lang)
+        hits = response.get('resultset_web')
 
         result = 'Searching the web for "%s"\n' % term
-        if table.rows:
-            for row in table.rows:
+        if hits:
+            for row in hits:
                 result += "(%s) %s : %s\n" % (row['date'],row['title'],row['url'])
         else:
             result += 'No sites found!'
@@ -69,16 +70,18 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
-        data = ysearch.search(term, vertical="news", count=10,lang=lang,region=lang)#1, more={'sort':'date'})
-        table = db.create(data=data)
+        yterm = term.encode('utf-8')
+
+        boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
+        response = boss_api.news(query=yterm,count=10, lang=lang, region=lang)
+        hits = response.get('resultset_news')
 
         result = 'Searching news for "%s"\n' % term
-        if table.rows:
-            for row in table.rows:
-                #print row
+        if hits:
+            for row in hits:
                 result += "(%s) %s : %s\n" % (row['date'],row['title'],row['url'])
         else:
-            result += 'No sites found!'
+            result += 'No news found!'
         return self.strip_tags(result)
 
     def search_blip(self, term):
@@ -93,38 +96,16 @@ web:xmpp #de'''
         term_utf8 = term.encode('utf-8')
         yterm = 'intitle:%s site:blip.fm inurl:profile -intitle:"Props given" -intitle:"Favourite DJs" \
                 -intitle:"Blip.fm %s"' % (term_utf8, term_utf8)
-        data = ysearch.search(yterm,count=15)
-        table = db.create(data=data)
+
+        boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
+        response = boss_api.web(query=yterm,count=15)
+        hits = response.get('resultset_web')
 
         result = 'Blips for "%s"\n' % term
-        if table.rows:
-            for row in table.rows:
+        if hits:
+            for row in hits:
                 result += "%s : %s\n" % (row['title'].replace('Blip.fm | ',''),row['url'])
         else:
             result += 'No blips found!'
         return self.strip_tags(result)
-        
-    def search_news_delicious(self, term):
-        '''
-        searches yahoo news and delicious popular links for gioven search term
-        '''
-        term = term.strip()
-        if term == '':
-            return "Please specify your search term"
-
-        dl = db.select(name="dl", udf=udfs.unnest_value, url="http://feeds.delicious.com/rss/popular/"+quote_plus(term))
-        #dl.describe()
-        yn = db.create(name="yn", data=ysearch.search(term, vertical="news", count=50))
-
-        tb = db.join(self.overlap_predicate, [dl, yn])
-        tb = db.group(by=["yn$title"], key=None, reducer=lambda x,y: None, as=None, table=tb, norm=text.norm)
-
-        result = 'Searching news for "%s"\n' % term
-        if tb.rows:
-            for row in tb.rows:
-                result += '%s\n%s\n' % (row["yn$title"], row["dl$link"])
-        else:
-            result += 'No sites found!'
-            
-        return result
 
