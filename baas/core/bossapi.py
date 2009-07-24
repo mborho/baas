@@ -34,7 +34,7 @@ class BossApi(object):
         response=urllib.urlopen(final_url)
         api_data=simplejson.load(response)
         result = api_data.get('ysearchresponse')
-
+        
         self.log('data:%s'% result)        
         return result
         

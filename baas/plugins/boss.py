@@ -19,7 +19,7 @@ class Boss (Plugin):
             returns the help text for the plugin
         """
         additional = '''
-Some commands (news,web) can be combined with #de, examples:
+Some commands (news,web) can be combined with lang-codes, like #de, #en, #es etc:
 news:hamburg #de
 web:xmpp #de'''
 
@@ -48,13 +48,8 @@ web:xmpp #de'''
         response = boss_api.web(query=yterm,count=10, lang=lang, region=lang)
         hits = response.get('resultset_web')
 
-        result = 'Searching the web for "%s"\n' % term
-        if hits:
-            for row in hits:
-                result += "(%s) %s : %s\n" % (row['date'],row['title'],row['url'])
-        else:
-            result += 'No sites found!'
-        return self.strip_tags(result)
+        title = 'Searching the web for %s\n' % term
+        return self.render(data=hits, title=title)
 
     def search_news(self, term):
         '''
@@ -75,14 +70,8 @@ web:xmpp #de'''
         boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
         response = boss_api.news(query=yterm,count=10, lang=lang, region=lang)
         hits = response.get('resultset_news')
-
-        result = 'Searching news for "%s"\n' % term
-        if hits:
-            for row in hits:
-                result += "(%s) %s : %s\n" % (row['date'],row['title'],row['url'])
-        else:
-            result += 'No news found!'
-        return self.strip_tags(result)
+        title = 'Searching news for %s\n' % term
+        return self.render(data=hits, title=title)
 
     def search_blip(self, term):
         '''
@@ -101,11 +90,54 @@ web:xmpp #de'''
         response = boss_api.web(query=yterm,count=15)
         hits = response.get('resultset_web')
 
-        result = 'Blips for "%s"\n' % term
+        return self.render(data=hits, title='Blips for %s' % term, extra_format='blip')
+        
+    def render_xmpp(self, hits, title):
+        '''
+        renders the result for xmpp responses
+        '''
+        result = title+"\n"
+        if hits:
+            for row in hits:
+                result += "(%s) %s : %s\n" % (row['date'],row['title'],row['url'])
+        else:
+            result += 'No hits found!'
+        return self.strip_tags(result)
+
+    def render_wave(self, hits, title):
+        '''
+        renders the result for wave responses
+        '''
+        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        if hits:
+            for row in hits:
+                title = self.xmlify(row['title'])
+                result += '<a href="%s">%s</a><br/><br/>' % (self.xmlify(row['url']), title)
+        else:
+            result += 'No hits found!'
+        return result
+
+    def render_xmpp_blip(self, hits, title):
+        '''
+        renders blip search result for xmpp responses
+        '''
+        result = title+"\n"
         if hits:
             for row in hits:
                 result += "%s : %s\n" % (row['title'].replace('Blip.fm | ',''),row['url'])
         else:
-            result += 'No blips found!'
+            result +='No blips found!'
         return self.strip_tags(result)
 
+    def render_wave_blip(self, hits, title):
+        '''
+        renders blip search result for wave responses
+        '''
+        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        if hits:
+            for row in hits:
+                title = self.xmlify(row['title'])
+                result += '<a href="%s">%s</a><br/>' % (self.xmlify(row['url']), title)
+        else:
+            result +='No blips found!'
+        return result

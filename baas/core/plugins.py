@@ -12,8 +12,9 @@ import re
 
 class PluginLoader(object):
 
-    def __init__(self, config=None):
-	self.config = config
+    def __init__(self, config=None, format='xmpp'):
+        self.config = config
+        self.format = format
         self.plugins = {}
         self.help = ''
         self.commands = {}
@@ -28,7 +29,7 @@ class PluginLoader(object):
                 self.plugins[file_parts[0].capitalize()] = \
 		getattr(__import__('baas.plugins.'+file_parts[0], globals(), \
 		locals(),[file_parts[0].capitalize()]), \
-		file_parts[0].capitalize())(config=self.config)
+		file_parts[0].capitalize())(config=self.config, format=self.format)
 
     def load_map(self):
         """
@@ -61,23 +62,37 @@ class PluginLoader(object):
         self.help = "\n".join(help_list)
         self.help += "\n%s" % "\n".join(help_additional)           
 
+xml_escapes = {
+    '&' : '&amp;',
+    '>' : '&gt;',
+    '<' : '&lt;',
+    #'"' : '&#34;',
+    #"'" : '&#39;'
+}
+
 class Plugin(object):
 
-    def __init__(self, config):
-	self.config = config
-        pass
+    def __init__(self, config, format='xmpp'):
+        self.config = config
+        self.format = format
 
     def get_map(self):
         return None
 
     def get_help(self):
         return None
-
+    
     def strip_tags(self, value):
         """
             Return the given HTML with all tags stripped.
         """
         return re.sub(r'<[^>]*?>', '', value)        
+
+    def xmlify(self, string):
+        """
+           makes a string xml valid
+        """
+        return re.sub(r'([&<>])', lambda m: xml_escapes[m.group()], self.strip_tags(string))
 
     def load_feed(self, url):
         """
@@ -105,3 +120,15 @@ class Plugin(object):
         """ thanks to http://snippets.dzone.com/posts/show/4569 """
         entity_re = re.compile(r'&(#?)(x?)(\d{1,5}|\w{1,8});')
         return entity_re.subn(self.substitute_entity, string)[0]
+
+    def render(self, data, title='', extra_format=None):
+        render_func = 'render_'+self.format
+        if extra_format:
+            render_func += '_'+extra_format
+        return  getattr(self, render_func)(data, title)
+
+    def render_xmpp(self, data):
+        pass
+
+    def render_wave(self, data):
+        pass

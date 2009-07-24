@@ -10,3 +10,6 @@ pwd = password
 
 [boss]
 api_key=HERE_YOUR_BOSS_KEY
+
+[wave]
+name='my appname'

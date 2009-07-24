@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
-import re
 import urllib2
 from urllib import quote_plus
 from baas.core.plugins import Plugin
@@ -65,10 +64,26 @@ tlate:How do you do? #de'''
             term = term.strip()
 
         translated_text, detected_lang = self._api_request(term, lang)
-        if translated_text:
-            result = '%s (%s => %s)' % (translated_text, detected_lang, lang)
+        return self.render(data={'text':translated_text, 'lang': lang, 'detected_lang': detected_lang}, title=None)
+
+    def render_xmpp(self, data, title):
+        '''
+        renders the result for xmpp responses
+        '''
+        if data.get('text'):
+            result = '%s (%s => %s)' % (data.get('text'), data.get('detected_lang'), data.get('lang'))
         else:
             result = 'Text translation failed'
-
         return self.strip_tags(result)
+
+    def render_wave(self, data, title):
+        '''
+        renders the result for wave responses
+        '''
+        result = " <br/><br/>"
+        if data.get('text'):
+            result += '<b>%s</b> <i>(%s =&gt; %s)</i>' % (self.xmlify(data.get('text')), data.get('detected_lang'), data.get('lang'))
+        else:
+            result += 'Text translation failed'
+        return result
 
