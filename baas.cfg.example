@@ -12,4 +12,7 @@ pwd = password
 api_key=HERE_YOUR_BOSS_KEY
 
 [wave]
-name='my appname'
+name=my appname
+image_url=http://yourapp.appspot.com/static/wave-icon.gif
+version=1
+profile_url=http://yourapp.appspot.com

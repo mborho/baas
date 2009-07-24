@@ -1,13 +1,18 @@
-Buddy as a Service (baas) is a jabber bot, using Yahoo Boss API, Google API and other services to do some stuff for you.
+Buddy as a Service (baas) is a jabber/wave robot, using Yahoo Boss API, Google API and other services to do some stuff for you.
 
 requirements:
 
-- install Universal Feed Parser ( http://www.feedparser.org )
-- install Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
+- Universal Feed Parser ( http://www.feedparser.org )
+- Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
+- if running as wave robot: wave-robot-python-client ( http://code.google.com/p/wave-robot-python-client/ )
 
-demo:
+xmpp demo:
 
 If you want to see BaaS in action, add baas@borho.net to your jabber contacts.
+
+wave-robot:
+
+add buddyasaservice@appspot.com to your contacts
 
 usage:
 

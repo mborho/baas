@@ -1,0 +1,11 @@
+application: yourapp
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /_wave/.*
+  script: bot_wave.py
+- url: /static
+  static_dir: baas/appengine/static
+

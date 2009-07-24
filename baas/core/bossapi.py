@@ -43,12 +43,3 @@ class BossApi(object):
        
     def news(self, query, **kwargs):
        return self.request('news', query, **kwargs)
-#        
-#    def do_spelling_search(self, query, **kwargs):
-#        return self.talk_to_yahoo('spelling', query, **kwargs)
-#    
-#    def do_images_search(self, query, **kwargs):
-#        return self.talk_to_yahoo('images', query, **kwargs)
-#    
-#    def do_siteexplorer_search(self, query, **kwargs):
-#        return self.talk_to_yahoo('se_inlink', query, **kwargs)
