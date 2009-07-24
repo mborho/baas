@@ -55,7 +55,7 @@ tlate:How do you do? #de'''
         example plugin
         '''
         result = ''
-        lang = 'de'       
+        lang = 'en'       
         if term == '':
             return "Please specify your text to translate"
 
