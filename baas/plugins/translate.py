@@ -71,7 +71,7 @@ tlate:How do you do? #de'''
         renders the result for xmpp responses
         '''
         if data.get('text'):
-            result = '%s (%s => %s)' % (data.get('text'), data.get('detected_lang'), data.get('lang'))
+            result = '%s (%s => %s)' % (self.htmlentities_decode(data.get('text')), data.get('detected_lang'), data.get('lang'))
         else:
             result = 'Text translation failed'
         return self.strip_tags(result)
@@ -82,7 +82,9 @@ tlate:How do you do? #de'''
         '''
         result = " <br/><br/>"
         if data.get('text'):
-            result += '<b>%s</b> <i>(%s =&gt; %s)</i>' % (self.xmlify(data.get('text')), data.get('detected_lang'), data.get('lang'))
+            result += '<b>%s</b> <i>(%s =&gt; %s)</i>' \
+                % (self.xmlify(self.htmlentities_decode(data.get('text'))),
+                    data.get('detected_lang'), data.get('lang'))
         else:
             result += 'Text translation failed'
         return result
