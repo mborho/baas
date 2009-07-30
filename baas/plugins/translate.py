@@ -30,7 +30,7 @@ tlate:Wie gehts?  #en
 tlate:Wie gehts?  #es
 tlate:How do you do? #de'''
 
-        return {'commands':['tlate:word #en - translates the word in german in english, #LANG sepcifies the target lang'],'additional':[additional]}
+        return {'commands':['tlate:word #en - translates the word in german in english, #LANG specifies the target lang'],'additional':[additional]}
 
     def _api_request(self, term, target_lang):
         result = ''

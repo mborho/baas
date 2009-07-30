@@ -38,9 +38,9 @@ def OnBlipSubmitted(properties, context):
     elif text and text.find(':')+1:
         cmd,args=text.split(':',1)
         commando_func = commands.get(cmd)
-    if commando_func:
-        result_msg = commando_func(args)
-        reply = result_msg
+        if commando_func:
+            result_msg = commando_func(args)
+            reply = result_msg
 
     
     if reply != '':
