@@ -2,6 +2,7 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 import urllib2
+import re
 from urllib import quote_plus
 from baas.core.plugins import Plugin
 
@@ -25,46 +26,56 @@ class Translate(Plugin):
             returns the help text for the plugin
         """
         additional = '''
-A translation needs the target language specified by a hashtag
-tlate:Wie gehts?  #en
-tlate:Wie gehts?  #es
+A translation can have the source (@) and the target (#) language specified by tags
+tlate:Wie gehts?  @de #en
+tlate:Wie gehts?  @de #es
 tlate:How do you do? #de'''
 
-        return {'commands':['tlate:word #en - translates the word in german in english, #LANG specifies the target lang'],'additional':[additional]}
+        return {'commands':['tlate:word [@source] [#target] - translates the word from @source in #target, default #en, @ is optional'],'additional':[additional]}
 
-    def _api_request(self, term, target_lang):
+    def _api_request(self, term, target_lang, source_lang=''):
         result = ''
         detected_lang = None
         try:
             url_term = quote_plus(term.encode('utf-8').lower())
-            api_url = 'http://www.google.com/uds/Gtranslate?context=22&q=%s&langpair=|%s&key=notsupplied&v=1.0' % (url_term, target_lang)
+            api_url = 'http://www.google.com/uds/Gtranslate?context=22&q=%s&langpair=%s|%s&key=notsupplied&v=1.0' % (url_term, source_lang, target_lang)
 
             req = urllib2.Request(api_url)
             response = urllib2.urlopen(req).read()
             api_response  = simplejson.loads(response)
+
             if api_response.get('responseStatus') == 200:
                 translate_data = api_response.get('responseData')
-                detected_lang = translate_data.get('detectedSourceLanguage')
+                if not source_lang:
+                    source_lang = translate_data.get('detectedSourceLanguage')
+
                 result = translate_data.get('translatedText')
         except:
             raise EnvironmentError, 'Translation failed'
-        return result, detected_lang
+        return result, source_lang
 
     def translate(self, term):
         '''
         example plugin
         '''
         result = ''
-        lang = 'en'       
+        target = 'en'
+        source = ''        
         if term == '':
             return "Please specify your text to translate"
 
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        pat = re.compile('(?P<term>[^#@]*)(?P<source>@[^\ #]*)?\ ?(?P<target>#[^\ @]*)?', re.I)
+        cmds = pat.search(term)
+        if cmds:
+            term = cmds.group('term')
+            source = cmds.group('source') or ''
+            target = cmds.group('target') or target
 
-        translated_text, detected_lang = self._api_request(term, lang)
-        return self.render(data={'text':translated_text, 'lang': lang, 'detected_lang': detected_lang}, title=None)
+        target = target.strip('#')
+        source = source.strip('@')
+
+        translated_text, detected_lang = self._api_request(term, target, source)
+        return self.render(data={'text':translated_text, 'lang': target, 'detected_lang': detected_lang}, title=None)
 
     def render_xmpp(self, data, title):
         '''

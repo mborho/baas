@@ -21,19 +21,18 @@ type 'help' for available commands
 news:word - searches for news
 web:word - websearch
 blip:song - search for songs on blip.fm
-tlate:word #en - translates the word in german in english, #LANG sepcifies the target lang
-bm:tag - searches bm.doomicile
+tlate:word [@source] [#target] - translates the word from @source in @target, default #target is english
 example:foo - gives you a bla for a foo
 blog:word - blog search via twingly
 micro:word - microblog search via twingly
 
-Some commands (news,web) can be combined with #de, examples:
+Some commands (news,web) can be combined with lang-codes, like #de, #en, #es etc:
 news:hamburg #de
 web:xmpp #de
 
-A translation needs the target language specified by a hashtag
-tlate:Wie gehts?  #en
-tlate:Wie gehts?  #es
+A translation can have the source (@) and the target (#) language specified by tags
+tlate:Wie gehts?  @de #en
+tlate:Wie gehts?  @de #es
 tlate:How do you do? #de
 
 ***************************************************************
