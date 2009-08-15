@@ -2,7 +2,7 @@ Buddy as a Service (baas) is a jabber/wave robot, using Yahoo Boss API, Google A
 
 requirements:
 
-- Universal Feed Parser ( http://www.feedparser.org )
+- Universal Feed Parser ( http://www.feedparser.org ) and Chardet
 - Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
 - if running as wave robot: wave-robot-python-client ( http://code.google.com/p/wave-robot-python-client/ )
 
