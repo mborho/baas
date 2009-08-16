@@ -53,16 +53,51 @@
     </div>
 
     <h2>Dependencies</h2>
-<p>- twisted
-- universal feedparser
-- chardet
-- waveapi</p>
+<p>- Universal Feed Parser ( http://www.feedparser.org ) and Chardet<br/>
+- Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )<br/>
+- if running as wave robot: wave-robot-python-client ( http://code.google.com/p/wave-robot-python-client/ )
+</p>
+<h2>Demo</h2>
+<p>
+<b>xmpp demo:</b><br/>
+If you want to see BaaS in action, add baas@borho.net to your jabber contacts.<br/>
+<br/>
+<b>wave-robot:</b><br/>
+add buddyasaservice@appspot.com to your contacts
+</p>
+<h2>Usage</h2>
+<p>
+<pre>
+type 'help' for available commands
+
+news:word - searches for news
+web:word - websearch
+blip:song - search for songs on blip.fm
+tlate:word [@source] [#target] - translates the word from @source in @target, default #target is english
+example:foo - gives you a bla for a foo
+blog:word - blog search via twingly
+micro:word - microblog search via twingly
+weather:city [,country] [#lang] - get weather information and forecast
+
+Some commands (news,web) can be combined with lang-codes, like #de, #en, #es etc:
+news:hamburg #de
+web:xmpp #de
+
+A translation can have the source (@) and the target (#) language specified by tags
+tlate:Wie gehts?  @de #en
+tlate:Wie gehts?  @de #es
+tlate:How do you do? #de
+</pre>
+<p>
 <h2>License</h2>
 <p>GPL v3</p>
 <h2>Authors</h2>
-<p>martin (martin@borho.net)<br/><br/>      </p>
+<p>martin (martin@borho.net)
+<br/>
+<br/>      </p>
 <h2>Contact</h2>
-<p>Martin Borho (martin@borho.net)<br/>      </p>
+<p>Martin Borho (martin@borho.net)
+<br/>      </p>
 
 
     <h2>Download</h2>
