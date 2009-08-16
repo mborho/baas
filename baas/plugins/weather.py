@@ -118,10 +118,10 @@ class Weather(Plugin):
         '''
         renders the result for wave responses
         '''
-        result = " <br/><br/>"
         i = data.get('info')
         if i:
-            result = '<b>%s</b>:<br/><br/>' % (self.htmlentities_decode(i.get('city')))#, i.get('current_date_time'))
+            result = " <br/><br/>"
+            result += '<b>%s</b>:<br/><br/>' % (self.htmlentities_decode(i.get('city')))#, i.get('current_date_time'))
             c = data.get('current')
             if c.get('condition'): 
                 result += '%s, ' % self.htmlentities_decode(c.get('condition'))
