@@ -44,7 +44,7 @@ def OnBlipSubmitted(properties, context):
 
     
     if reply != '':
-        blip.GetDocument().SetText("")
+        blip.GetDocument().SetText(" ")
         reply = '<b>asked</b> %s %s' % (xmlify(text), reply)
         builder = OpBuilder(context)
         builder.DocumentAppendMarkup(blip.waveId, blip.waveletId, properties['blipId'], reply)
