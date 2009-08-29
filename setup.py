@@ -1,10 +1,7 @@
-#from setuptools import setup
-#setup(name='baas')
-
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.1.2'
+version = '0.1.1.3b'
 
 setup(name='baas',
       version=version,
@@ -25,11 +22,9 @@ setup(name='baas',
         'feedparser',
         'chardet',
         'simplejson'
-          # -*- Extra requirements: -*-
       ],
       entry_points="""
-      # -*- Entry points: -*-
-      baas_bot = zeit.care.worker:isofy_main
-
+      [console_scripts]  
+      baas_bot = baas.scripts.bot:main
       """,
       )

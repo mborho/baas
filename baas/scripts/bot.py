@@ -3,8 +3,10 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 import sys
+import os.path
 import traceback
 import ConfigParser
+from optparse import OptionParser
 from twisted.words.protocols.jabber import client, jid
 from twisted.words.xish import domish, xmlstream
 from twisted.internet import reactor
@@ -16,22 +18,14 @@ def getTraceback():
     e_tb   = "".join(traceback.format_tb(e_info[2]))
     return ' Error Type: '+str(e_info[0])+'\nError Value: '+str(e_info[1])+'\nTraceback:\n'+e_tb+'\n'
 
-config = ConfigParser.ConfigParser()
-config.read("baas.cfg")
-
-pluginHnd = PluginLoader(config=config)
-pluginHnd.load_plugins()
-pluginHnd.load_map()
-pluginHnd.load_help()
-commands= pluginHnd.commands
-
 class Bot(object):
 
-    def __init__(self, config):
+    def __init__(self, config, ):
 
         self.config = config
         self.debug = self.config.getint('app','debug')
-        
+        self._load_plugins()
+
         me = jid.JID(self.config.get('bot','jid'))
         self.factory = client.basicClientFactory(me, self.config.get('bot','pwd'))
         self.factory.addBootstrap('//event/stream/authd',self.authd)
@@ -41,6 +35,13 @@ class Bot(object):
         
         reactor.run()
         self.reactor = reactor
+
+    def _load_plugins(self):        
+        self.pluginHnd = PluginLoader(config=self.config)
+        self.pluginHnd.load_plugins()
+        self.pluginHnd.load_map()
+        self.pluginHnd.load_help()
+        self.commands= self.pluginHnd.commands
 
     def gotMessage(self, message):
         
@@ -61,14 +62,14 @@ class Bot(object):
 
             if text and text.find(':')+1:
                 cmd,args=text.split(':',1)
-                commando_func = commands.get(cmd)
+                commando_func = self.commands.get(cmd)
                 if commando_func:
-                    result_msg = commando_func(args)
+                    result_msg = self.commando_func(args)
                     reply = result_msg
                 else:
                     reply = 'Uups, commando not known\n'
             elif text and text == 'help':
-                reply += "\n\n%s" % pluginHnd.help
+                reply += "\n\n%s" % self.pluginHnd.help
 
         except:
             reply = getTraceback()
@@ -90,7 +91,6 @@ class Bot(object):
         
 
     def authd(self, xmlstream):
-        print "authd"
         # need to send presence so clients know we're
         # actually online.
         presence = domish.Element(('jabber:client', 'presence'))
@@ -102,5 +102,24 @@ class Bot(object):
         xmlstream.addObserver('/message', self.gotMessage)
         self.xmlstream = xmlstream
 
-if __name__ == "__main__":
-    bot = Bot(config)
+def main():
+    usage = "usage: %prog [options] arg"
+    parser = OptionParser(usage)
+    parser.add_option("-c", "--config", dest="config",
+                      help="configuration file (default: /etc/baas.cfg)")
+    (options, args) = parser.parse_args()
+
+    
+    if not options.config:
+        config_file = "/etc/baas.cfg"
+    else:
+        config_file = options.config
+
+    if not os.path.isfile(config_file):
+        sys.exit('Configuration file does not exist, exiting. Type -h for help.')
+
+    config = ConfigParser.ConfigParser()
+    config.read(config_file)
+
+    print "starting buddy as service bot"
+    bot= Bot(config)
