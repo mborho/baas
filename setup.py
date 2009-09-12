@@ -23,6 +23,8 @@ see http://mborho.github.com/baas for more infos
       url='http://mborho.github.com/baas',
       license='GNU General Public License (GPL)',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      #data_files=[('conf',"conf/baas.conf")],
+
       include_package_data=True,
       zip_safe=False,
       install_requires=[
