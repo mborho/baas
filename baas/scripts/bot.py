@@ -107,15 +107,23 @@ def main():
     parser = OptionParser(usage)
     parser.add_option("-c", "--config", dest="config",
                       help="configuration file (default: /etc/baas.cfg)")
+    parser.add_option("-s", "--show-conf-example", dest="show_conf_example",
+                     action="store_true", default=False, help="show example config file")
     (options, args) = parser.parse_args()
 
     
     if not options.config:
-        config_file = "/etc/baas.cfg"
+        config_file = "/etc/baas.conf"
     else:
         config_file = options.config
 
-    if not os.path.isfile(config_file):
+    if options.show_conf_example:
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'conf/baas.conf'))
+        conf_example = f.read()
+        f.close()
+        print conf_example
+        sys.exit()
+    elif not os.path.isfile(config_file):
         sys.exit('Configuration file does not exist, exiting. Type -h for help.')
 
     config = ConfigParser.ConfigParser()
