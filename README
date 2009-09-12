@@ -50,7 +50,7 @@ a) download source package from github
 b) extract source package in your app root
 c) copy baas/conf/app.yaml to your app root and modify
 d) copy baas/conf/baas.conf to your app root and modify
-e) fullfill package dependiencies
+e) fullfill package dependencies
 
 ***************************************************************
 ****** Copyright 2009 Martin Borho <martin@borho.net> *********
