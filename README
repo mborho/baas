@@ -36,6 +36,22 @@ tlate:Wie gehts?  @de #en
 tlate:Wie gehts?  @de #es
 tlate:How do you do? #de
 
+Installation/Configuration:
+
+xmpp-bot:
+a) easy_install baas
+b) command 'baas_bot' will be installed
+c) for an example configuration file type 'baas_bot -s'
+d) for all options type 'baas_bot -h'
+e) start your bot with 'baas_bot -c /path/to/your/conf'
+
+wave-bot:
+a) download source package from github
+b) extract source package in your app root
+c) copy baas/conf/app.yaml to your app root and modify
+d) copy baas/conf/baas.conf to your app root and modify
+e) fullfill package dependiencies
+
 ***************************************************************
 ****** Copyright 2009 Martin Borho <martin@borho.net> *********
 ****** GPLv3 - see License.txt for details            *********

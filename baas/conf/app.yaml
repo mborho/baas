@@ -5,7 +5,7 @@ api_version: 1
 
 handlers:
 - url: /_wave/.*
-  script: bot_wave.py
+  script: baas/appengine/bot_wave.py
 - url: /static
   static_dir: baas/appengine/static
 

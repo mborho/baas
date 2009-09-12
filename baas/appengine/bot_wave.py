@@ -11,7 +11,7 @@ from baas.core.plugins import PluginLoader
 from baas.core.helpers import *
 
 config = ConfigParser.ConfigParser()
-config.read("baas.cfg")
+config.read("../../baas.cfg")
 
 pluginHnd = PluginLoader(config=config, format="wave")
 pluginHnd.load_plugins()
