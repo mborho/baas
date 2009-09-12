@@ -64,7 +64,7 @@ class Bot(object):
                 cmd,args=text.split(':',1)
                 commando_func = self.commands.get(cmd)
                 if commando_func:
-                    result_msg = self.commando_func(args)
+                    result_msg = commando_func(args)
                     reply = result_msg
                 else:
                     reply = 'Uups, commando not known\n'
