@@ -25,7 +25,7 @@ class XMPPHandler(webapp.RequestHandler):
         
         message = xmpp.Message(self.request.POST)
         # message.from,to,body,stanza
-        text = message.body
+        text = message.body.strip()
 
         reply = "type 'help' for available commands"
 
@@ -36,7 +36,7 @@ class XMPPHandler(webapp.RequestHandler):
                 commando_func = commands.get(cmd)
                 if commando_func:
                     result_msg = commando_func(args)
-                    reply = ressult_msg
+                    reply = result_msg
                 else:
                     reply = 'Uups, commando not known\n'
             elif text and text == 'help':
