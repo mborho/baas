@@ -1,36 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>mborho/baas - Buddy As A Service @ GitHub</title>
-	
-	<style type="text/css">
-		body {
-  		margin-top: 1.0em;
-  		background-color: #4c580b;
-		  font-family: "Helvetica,Arial,FreeSans"; 
-  		color: #ffffff;
+    <title>mborho/baas - Buddy As A Service @ GitHub</title>
+    
+    <style type="text/css">
+        body {
+        margin-top: 1.0em;
+        background-color: #4c580b;
+          font-family: "Helvetica,Arial,FreeSans"; 
+        color: #ffffff;
     }
     #container {
       margin: 0 auto;
       width: 700px;
     }
-		h1 { font-size: 3.8em; color: #b3a7f4; margin-bottom: 3px; }
-		h1 .small { font-size: 0.4em; }
-		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #b3a7f4; }
+        h1 { font-size: 3.8em; color: #b3a7f4; margin-bottom: 3px; }
+        h1 .small { font-size: 0.4em; }
+        h1 a { text-decoration: none }
+        h2 { font-size: 1.5em; color: #b3a7f4; }
     h3 { text-align: center; color: #b3a7f4; }
     a { color: #b3a7f4; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
+        pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
-	</style>
-	
+    </style>
+    
 </head>
 
 <body>
@@ -39,9 +39,9 @@
   <div id="container">
 
     <div class="download">
-      <a rel="/mborho/baas/is_zip_ready/0.1" href="http://github.com/mborho/baas/zipball/0.1.2">
+      <a rel="/mborho/baas/is_zip_ready/0.1" href="http://github.com/mborho/baas/zipball/0.1.3">
         <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a rel="/mborho/baas/is_tar_ready/0.1" href="http://github.com/mborho/baas/tarball/0.1.2">
+      <a rel="/mborho/baas/is_tar_ready/0.1" href="http://github.com/mborho/baas/tarball/0.1.3">
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
       
@@ -49,10 +49,11 @@
       <span class="small">by <a href="http://github.com/mborho">mborho</a></span></h1>
 
     <div class="description">
-      "Buddy as a Service" is a xmpp / wavelet robot using Yahoo Boss API, Google API and other services to do some stuff for you. If you want to see BaaS in action, add baas@borho.net to your jabber contacts.
+      <p>"Buddy as a Service" is a xmpp / wavelet robot using Yahoo Boss API, Google API and other services to do some stuff for you. </p>
+     <p>The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins.</p>
     </div>
 
-    <h2>Version 0.1.2</h2>
+    <h2>Version 0.1.3</h2>
 
     <h2>Dependencies</h2>
 <p>- <a href="http://www.feedparser.org">Universal Feed Parser</a> and <a href="http://chardet.feedparser.org/">Chardet</a><br/>
@@ -60,9 +61,13 @@
 - if running as wave robot: <a href="http://code.google.com/p/wave-robot-python-client/">wave-robot-python-client</a>
 </p>
 <h2>Demo</h2>
+<p><b>If you want to see BaaS in action, try one of the following demos:</b></p>
 <p>
 <b>xmpp demo:</b><br/>
-If you want to see BaaS in action, add JID <b>baas@borho.net</b> to your jabber contacts.<br/>
+add JID <b>baas@borho.net</b> to your jabber contacts<br/>
+<br/>
+<b>appengine-xmpp-robot:</b><br/>
+add JID <b>buddyasaservice@appspot.com</b> to your jabber contacts<br/>
 <br/>
 <b>wave-robot:</b><br/>
 add <b>buddyasaservice@appspot.com</b> to your contacts
@@ -99,7 +104,7 @@ d) for all options type <b>baas_bot -h</b><br/>
 e) start your bot with <b>baas_bot -c /path/to/your/conf</b><br/>
 </p>
 <p>
-<b>wave-bot:</b><br/>
+<b>wave-robot/appengine-xmpp-bot:</b><br/>
 a) download source package from github<br/>
 b) extract source package in your app root<br/>
 c) copy baas/conf/app.yaml to your app root and modify<br/>
