@@ -10,7 +10,9 @@ requirements:
 
 If you want to see BaaS in action, try one of the following demos:
 
-xmpp-bot: add baas@borho.net to your jabber contacts.
+xmpp-bot: 
+
+add baas@borho.net to your jabber contacts.
 
 appengine-xmpp-robot:
 
