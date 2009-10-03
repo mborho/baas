@@ -1,4 +1,5 @@
 Buddy as a Service (baas) is a jabber/wave robot, using Yahoo Boss API, Google API and other services to do some stuff for you.
+The XMPP bot also runs on the google appengine.
 
 requirements:
 
@@ -6,9 +7,13 @@ requirements:
 - Twisted Words ( http://twistedmatrix.com/trac/wiki/TwistedWords )
 - if running as wave robot: wave-robot-python-client ( http://code.google.com/p/wave-robot-python-client/ )
 
-xmpp demo:
+If you want to see BaaS in action, try one of the following demos:
 
-If you want to see BaaS in action, add baas@borho.net to your jabber contacts.
+xmpp-bot: add baas@borho.net to your jabber contacts.
+
+appengine-xmpp-robot:
+
+add buddyasaservice@appspot.com to your jabber contacts
 
 wave-robot:
 
@@ -45,7 +50,7 @@ c) for an example configuration file type 'baas_bot -s'
 d) for all options type 'baas_bot -h'
 e) start your bot with 'baas_bot -c /path/to/your/conf'
 
-wave-bot:
+wave-robot/appengine-xmpp-bot:
 a) download source package from github
 b) extract source package in your app root
 c) copy baas/conf/app.yaml to your app root and modify

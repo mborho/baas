@@ -8,4 +8,8 @@ handlers:
   script: baas/appengine/bot_wave.py
 - url: /static
   static_dir: baas/appengine/static
+- url: /_ah/xmpp/message/chat/.*
+  script: baas/appengine/bot_xmpp.py
 
+inbound_services:
+- xmpp_message
