@@ -55,7 +55,6 @@ class Bot(object):
                 text = unicode(e.__str__())
                 break
 
-
         reply = "type 'help' for available commands"
 
         try:
@@ -131,3 +130,7 @@ def main():
 
     print "starting buddy as service bot"
     bot= Bot(config)
+
+if __name__ == "__main__":
+    main()
+
