@@ -50,10 +50,9 @@ web:xmpp #de'''
 
         yql_api = YQLApi()
         response = yql_api.web(query=query)
-        hits = response.get('result') if response else None
 
         title = 'Searching the web for %s\n' % term
-        return self.render(data=hits, title=title)
+        return self.render(data=response, title=title)
 
     def search_news(self, term):
         '''
@@ -78,11 +77,10 @@ web:xmpp #de'''
         query += '| sort(field="age")'
 
         yql_api = YQLApi()
-        response = yql_api.news(query=query)
-        hits = response.get('result') if response else None
-
+        response = yql_api.news(query=query)        
+        
         title = 'Searching news for %s\n' % term
-        return self.render(data=hits, title=title)
+        return self.render(data=response, title=title)
         
 
     def search_blip(self, term):
@@ -102,9 +100,8 @@ web:xmpp #de'''
 
         yql_api = YQLApi()
         response = yql_api.news(query=query)
-        hits = response.get('result') if response else None
 
-        return self.render(data=hits, title='Blips for %s' % term, extra_format='blip')
+        return self.render(data=response, title='Blips for %s' % term, extra_format='blip')
         
     def render_xmpp(self, hits, title):
         '''

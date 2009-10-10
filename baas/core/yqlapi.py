@@ -35,9 +35,15 @@ class YQLApi(object):
         response=urllib.urlopen(final_url)
         api_data=simplejson.load(response)
         result = api_data.get('query',{}).get('results',{})
+
+        hits = result.get('result') if result else None
         
-        self.log('data:%s'% result)        
-        return result
+        # handle single result
+        if type(hits) == dict:
+            hits = [hits]
+
+        self.log('data:%s'% hits)        
+        return hits
         
     def web(self, query, **kwargs):                    
         return self.request('web', query, **kwargs)
