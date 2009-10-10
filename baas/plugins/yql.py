@@ -3,9 +3,10 @@
 # GPL - see License.txt for details
 from urllib import quote_plus
 from baas.core.bossapi import BossApi
+from baas.core.yqlapi import YQLApi
 from baas.core.plugins import Plugin
 
-class Boss (Plugin):
+class Yql (Plugin):
 
     def get_map(self):
         """
@@ -42,11 +43,15 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
-        yterm = term.encode('utf-8')
-        
-        boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
-        response = boss_api.web(query=yterm,count=10, lang=lang, region=lang)
-        hits = response.get('resultset_web')
+        query = 'select title,select title,abstract from search.web where query="pizza"url,date '
+        query += 'from search.web where query="%s" ' % term
+
+        if lang:
+            query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
+
+        yql_api = YQLApi()
+        response = yql_api.web(query=query)
+        hits = response.get('result') if response else None
 
         title = 'Searching the web for %s\n' % term
         return self.render(data=hits, title=title)
@@ -65,13 +70,21 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
-        yterm = term.encode('utf-8')
+        query = 'select title,url,date '
+        query += 'from search.news where query="%s" ' % term
 
-        boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
-        response = boss_api.news(query=yterm,count=10, lang=lang, region=lang)
-        hits = response.get('resultset_news')
+        if lang:
+            query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
+
+        query += '| sort(field="age")'
+
+        yql_api = YQLApi()
+        response = yql_api.news(query=query)
+        hits = response.get('result') if response else None
+
         title = 'Searching news for %s\n' % term
         return self.render(data=hits, title=title)
+        
 
     def search_blip(self, term):
         '''
@@ -81,14 +94,16 @@ web:xmpp #de'''
 
         if term == '':
             return "Please specify your search term"
-        
-        term_utf8 = term.encode('utf-8')
-        yterm = 'intitle:%s site:blip.fm inurl:profile -intitle:"Props given" -intitle:"Favourite DJs" \
-                -intitle:"Blip.fm %s"' % (term_utf8, term_utf8)
 
-        boss_api = BossApi(self.config.get('boss','api_key'))#,logging)
-        response = boss_api.web(query=yterm,count=15)
-        hits = response.get('resultset_web')
+        yterm = 'intitle:"%s" site:blip.fm inurl:profile -intitle:"Props given" -intitle:"Favourite DJs" \
+                -intitle:"Blip.fm %s"' % (term, term)
+
+        query = 'select title,url from search.web(0,15) '
+        query += "WHERE query = '%s'" % yterm
+
+        yql_api = YQLApi()
+        response = yql_api.news(query=query)
+        hits = response.get('result') if response else None
 
         return self.render(data=hits, title='Blips for %s' % term, extra_format='blip')
         

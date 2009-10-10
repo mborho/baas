@@ -11,8 +11,8 @@ try:
 except:
     import simplejson
 
-class BossApi(object):
-    def __init__(self, app_key, logger=None):
+class YQLApi(object):
+    def __init__(self, app_key=None, logger=None):
         self.app_key = app_key
         self.logger = logger
         
@@ -21,19 +21,20 @@ class BossApi(object):
             self.logger.info(msg)
         
     def request(self, type_, query, **kwargs):
+
         self.log('Query:%s'%query)
         self.log('type_:%s'%type_)
         self.log('Other Args:%s'%kwargs)
 
-        base_url = 'http://boss.yahooapis.com/ysearch/%s/v1/%s?%s'
-        kwargs['appid'] = self.app_key
-        payload = urllib.urlencode(kwargs)
-        final_url = base_url%(type_, urllib.quote_plus(query), payload)
+        base_url = 'http://query.yahooapis.com/v1/public/yql?q=%s&format=json'
+        base_url += '&diagnostics=false&callback='
+        yql_query = urllib.quote_plus(query.encode('utf-8'))
+        final_url = base_url % (yql_query)
         self.log('final_url: %s'%final_url)
 
         response=urllib.urlopen(final_url)
         api_data=simplejson.load(response)
-        result = api_data.get('ysearchresponse')
+        result = api_data.get('query',{}).get('results',{})
         
         self.log('data:%s'% result)        
         return result
