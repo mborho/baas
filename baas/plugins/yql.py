@@ -2,7 +2,6 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from urllib import quote_plus
-from baas.core.bossapi import BossApi
 from baas.core.yqlapi import YQLApi
 from baas.core.plugins import Plugin
 
@@ -43,7 +42,7 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
-        query = 'select title,select title,abstract from search.web where query="pizza"url,date '
+        query = 'select title,url,date '
         query += 'from search.web where query="%s" ' % term
 
         if lang:
