@@ -105,7 +105,7 @@ def main():
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
     parser.add_option("-c", "--config", dest="config",
-                      help="configuration file (default: /etc/baas.cfg)")
+                      help="configuration file (default: /etc/baas.conf)")
     parser.add_option("-s", "--show-conf-example", dest="show_conf_example",
                      action="store_true", default=False, help="show example config file")
     (options, args) = parser.parse_args()

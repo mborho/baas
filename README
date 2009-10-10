@@ -1,4 +1,4 @@
-Buddy as a Service (baas) is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches and some other things for you.
+Buddy as a Service (baas) is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches and some other stuff (translations, weather forecast, etc) for you.
 
 The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins. No API Keys required!
 

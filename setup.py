@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.3'
+version = '0.1.4'
 
 setup(name='baas',
       version=version,
-      description="'Buddy as a Service' is a xmpp / wavelet robot using Yahoo YQL API, Google API and other services to do searches and some other things for you.",
+      description="'Buddy as a Service' is a xmpp / wavelet robot using Yahoo YQL API, Google API and other services to do searches and some other stuff (translations, weather forecast, etc) for you.",
       long_description="""\
-The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins.  No API Keys required!\
+The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins.  No API Keys required! \
 See http://mborho.github.com/baas for more infos.
 """,
       classifiers=[
