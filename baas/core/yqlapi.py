@@ -28,6 +28,9 @@ class YQLApi(object):
 
         base_url = 'http://query.yahooapis.com/v1/public/yql?q=%s&format=json'
         base_url += '&diagnostics=false&callback='
+        if kwargs.get('community'):
+            base_url += '&env=store://datatables.org/alltableswithkeys'
+            
         yql_query = urllib.quote_plus(query.encode('utf-8'))
         final_url = base_url % (yql_query)
         self.log('final_url: %s'%final_url)
