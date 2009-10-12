@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>mborho/baas - Buddy As A Service @ GitHub</title>
+    
+    <style type="text/css">
+        body {
+        margin-top: 1.0em;
+        background-color: #4c580b;
+          font-family: "Helvetica,Arial,FreeSans"; 
+        color: #ffffff;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+        h1 { font-size: 3.8em; color: #b3a7f4; margin-bottom: 3px; }
+        h1 .small { font-size: 0.4em; }
+        h1 a { text-decoration: none }
+        h2 { font-size: 1.5em; color: #b3a7f4; }
+    h3 { text-align: center; color: #b3a7f4; }
+    a { color: #b3a7f4; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+        pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+    </style>
+    
+</head>
+
+<body>
+  <a href="http://github.com/mborho/baas"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  
+  <div id="container">
+
+    <div class="download">
+      <a rel="/mborho/baas/is_zip_ready/0.1.4.1" href="http://github.com/mborho/baas/zipball/0.1.4.1">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a rel="/mborho/baas/is_tar_ready/0.1.4.1" href="http://github.com/mborho/baas/tarball/0.1.4.1">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+      
+    <h1><a href="http://github.com/mborho/baas">baas - Buddy As A Service</a> 
+      <span class="small">by <a href="http://github.com/mborho">mborho</a></span></h1>
+
+    <div class="description">
+      <p>"Buddy as a Service" is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches and some other stuff (translations, weather forecast, etc) for you.</p>
+     <p>The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins. No API-Keys are required!</p>
+    </div>
+
+    <h2>Version 0.1.4.1</h2>
+
+    <h2>Dependencies</h2>
+<p>- <a href="http://www.feedparser.org">Universal Feed Parser</a> and <a href="http://chardet.feedparser.org/">Chardet</a><br/>
+- <a href="http://twistedmatrix.com/trac/wiki/TwistedWords">Twisted Words</a><br/>
+- if running as wave robot: <a href="http://code.google.com/p/wave-robot-python-client/">wave-robot-python-client</a>
+</p>
+<h2>Demo</h2>
+<p><b>If you want to see BaaS in action, try one of the following demos:</b></p>
+<p>
+<b>xmpp demo:</b><br/>
+add JID <b>baas@borho.net</b> to your jabber contacts<br/>
+<br/>
+<b>appengine-xmpp-robot:</b><br/>
+add JID <b>buddyasaservice@appspot.com</b> to your jabber contacts<br/>
+<br/>
+<b>wave-robot:</b><br/>
+add <b>buddyasaservice@appspot.com</b> to your contacts
+</p>
+<h2>Usage</h2>
+<p>
+type '<b>help</b>' for available commands<br/>
+<br/>
+<b>news:word</b> - searches for news<br/>
+<b>web:word</b> - websearch<br/>
+<b>blip:song</b> - search for songs on blip.fm<br/>
+<b>tlate:word [@source] [#target]</b> - translates the word from @source in @target, default #target is english<br/>
+<b>example:foo</b> - gives you a bla for a foo<br/>
+<b>blog:word</b> - blog search via twingly<br/>
+<b>micro:word</b> - microblog search via twingly<br/>
+<b>weather:city [,country] [#lang]</b> - get weather information and forecast<br/>
+<br/>
+Some commands (news,web) can be combined with lang-codes, like <b>#de</b>, <b>#en</b>, <b>#es</b> etc:<br/>
+<b>news:hamburg #de</b><br/>
+<b>web:xmpp #de</b><br/>
+<br/>
+A translation can have the source (@) and the target (#) language specified by tags<br/>
+<b>tlate:Wie gehts?  @de #en</b><br/>
+<b>tlate:Wie gehts?  @de #es</b><br/>
+<b>tlate:How do you do? #de</b><br/>
+<p></p>
+<h2>Installation/Configuration:</h2>
+<p>
+<b>xmpp-bot:</b><br/>
+a) <b>easy_install baas</b><br/>
+b) command <b>baas_bot</b> will be installed<br/>
+c) for an example configuration file type <b>baas_bot -s</b><br/>
+d) for all options type <b>baas_bot -h</b><br/>
+e) start your bot with <b>baas_bot -c /path/to/your/conf</b><br/>
+</p>
+<p>
+<b>wave-robot/appengine-xmpp-bot:</b><br/>
+a) download source package from github<br/>
+b) extract source package in your app root<br/>
+c) copy baas/conf/app.yaml to your app root and modify<br/>
+d) copy baas/conf/baas.conf to your app root and modify<br/>
+e) fullfill package dependencies<br/>
+</p>
+<h2>License</h2>
+<p>GPL v3</p>
+<h2>Authors</h2>
+<p>martin (martin@borho.net)
+<br/>
+<br/>      </p>
+<h2>Contact</h2>
+<p>Martin Borho (martin@borho.net)
+<br/>      </p>
+
+
+    <h2>Download</h2>
+    <p>
+      You can download this project in either
+      <a href="http://github.com/mborho/baas/zipball/master">zip</a> or
+      <a href="http://github.com/mborho/baas/tarball/master">tar</a> formats.
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+      by running:
+      <pre>$ git clone git://github.com/mborho/baas</pre>
+    </p>
+      
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/mborho/baas">mborho/baas</a>
+    </div>
+    
+  </div>
+
+  
+</body>
+</html>
