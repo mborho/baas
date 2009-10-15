@@ -56,11 +56,11 @@ class PluginLoader(object):
         for h in help_infos:
             for t in help_infos[h].get('commands'):
                 help_list.append(t)
-            for a in help_infos[h].get('additional'):
-                help_additional.append(a)
+            for a in help_infos[h].get('additional',[]):
+                if a: help_additional.append(a)
 
         self.help = "\n".join(help_list)
-        self.help += "\n%s" % "\n".join(help_additional)           
+        self.help += "\n\n%s" % "\n\n".join(help_additional)           
 
 xml_escapes = {
     '&' : '&amp;',

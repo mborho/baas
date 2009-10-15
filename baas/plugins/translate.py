@@ -25,8 +25,7 @@ class Translate(Plugin):
         """
             returns the help text for the plugin
         """
-        additional = '''
-A translation can have the source (@) and the target (#) language specified by tags
+        additional = '''A translation can have the source (@) and the target (#) language specified by tags
 tlate:Wie gehts?  @de #en
 tlate:Wie gehts?  @de #es
 tlate:How do you do? #de'''

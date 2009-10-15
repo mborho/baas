@@ -18,8 +18,7 @@ class Yql (Plugin):
         """
             returns the help text for the plugin
         """
-        additional = '''
-Some commands (news,web) can be combined with lang-codes, like #de, #en, #es etc:
+        additional = '''Some commands (news,web) can be combined with lang-codes, like #de, #en, #es etc:
 news:hamburg #de
 web:xmpp #de'''
 
@@ -28,6 +27,14 @@ web:xmpp #de'''
             'additional': [additional],
         }
 
+    def _extract_hits(self, result):
+        hits = result.get('result') if result else None
+    
+        # handle single result
+        if type(hits) == dict:
+            hits = [hits]
+        return hits
+         
     def search_web(self, term):
         '''
         searches web by yahoo
@@ -49,10 +56,11 @@ web:xmpp #de'''
             query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
 
         yql_api = YQLApi()
-        response = yql_api.web(query=query)
-
+        response = yql_api.request(query=query)
+        hits = self._extract_hits(response)
+        
         title = 'Searching the web for %s\n' % term
-        return self.render(data=response, title=title)
+        return self.render(data=hits, title=title)
 
     def search_news(self, term):
         '''
@@ -77,10 +85,11 @@ web:xmpp #de'''
         query += '| sort(field="age")'
 
         yql_api = YQLApi()
-        response = yql_api.news(query=query)        
-        
+        response = yql_api.request(query=query)        
+        hits = self._extract_hits(response)
+                
         title = 'Searching news for %s\n' % term
-        return self.render(data=response, title=title)
+        return self.render(data=hits, title=title)
         
 
     def search_blip(self, term):
@@ -99,9 +108,10 @@ web:xmpp #de'''
         query += "WHERE query = '%s'" % yterm
 
         yql_api = YQLApi()
-        response = yql_api.news(query=query)
-
-        return self.render(data=response, title='Blips for %s' % term, extra_format='blip')
+        response = yql_api.request(query=query)
+        hits = self._extract_hits(response)
+        
+        return self.render(data=hits, title='Blips for %s' % term, extra_format='blip')
         
     def render_xmpp(self, hits, title):
         '''
