@@ -29,6 +29,8 @@ type 'help' for available commands
 news:word - searches for news
 web:word - websearch
 blip:song - search for songs on blip.fm
+gnews:word - google news search
+gweb:word - google web search
 tlate:word [@source] [#target] - translates the word from @source in @target, default #target is english
 example:foo - gives you a bla for a foo
 blog:word - blog search via twingly
@@ -38,6 +40,10 @@ weather:city [,country] [#lang] - get weather information and forecast
 Some commands (news,web) can be combined with lang-codes, like #de, #en, #es etc:
 news:hamburg #de
 web:xmpp #de
+
+gnews and gweb can be also combined with lang-codes, like #de, #en, #es etc:
+gnews:hamburg #de
+gweb:xmpp #de
 
 A translation can have the source (@) and the target (#) language specified by tags
 tlate:Wie gehts?  @de #en
