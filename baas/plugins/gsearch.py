@@ -28,7 +28,7 @@ gweb:xmpp #de'''
         }
 
     def _extract_hits(self, result):
-        hits = result.get('result') if result else None
+        hits = result.get('results') if result else None
     
         # handle single result
         if type(hits) == dict:
@@ -55,7 +55,7 @@ gweb:xmpp #de'''
 
         yql_api = YQLApi(community=True)
         response = yql_api.request(query=query)
-        hits = response.get('results') if response else None
+        hits = self._extract_hits(response)
 
         title = 'Web search for %s\n' % term
         return self.render(data=hits, title=title)
@@ -81,7 +81,7 @@ gweb:xmpp #de'''
 
         yql_api = YQLApi(community=True)
         response = yql_api.request(query=query)
-        hits = response.get('results') if response else None
+        hits = self._extract_hits(response)
 
         title = 'Google news search for %s\n' % term
         return self.render(data=hits, title=title)        
