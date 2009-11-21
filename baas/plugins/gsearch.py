@@ -74,8 +74,7 @@ gweb:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
-        query = 'USE "http://www.datatables.org/google/google.news.xml" AS google.news; '  
-        query += 'select * from google.news(0,8) where q="%s"' % term
+        query = 'select * from google.news(0,8) where q="%s"' % term
         if lang:
             query += ' AND ned="%s"' % (lang)
 
