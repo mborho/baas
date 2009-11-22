@@ -39,13 +39,13 @@
   <div id="container">
 
     <div class="download">
-      <a rel="/mborho/baas/is_zip_ready/0.1.4.1" href="http://github.com/mborho/baas/zipball/0.1.4.1">
+      <a rel="/mborho/baas/is_zip_ready/0.1.5" href="http://github.com/mborho/baas/zipball/0.1.5">
         <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a rel="/mborho/baas/is_tar_ready/0.1.4.1" href="http://github.com/mborho/baas/tarball/0.1.4.1">
+      <a rel="/mborho/baas/is_tar_ready/0.1.5" href="http://github.com/mborho/baas/tarball/0.1.5">
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
       
-    <h1><a href="http://github.com/mborho/baas">baas - Buddy As A Service</a> 
+    <h1><a href="http://github.com/mborho/baas">BaaS - Buddy As A Service</a> 
       <span class="small">by <a href="http://github.com/mborho">mborho</a></span></h1>
 
     <div class="description">
@@ -53,7 +53,7 @@
      <p>The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins. No API-Keys are required!</p>
     </div>
 
-    <h2>Version 0.1.4.1</h2>
+    <h2>Version 0.1.5</h2>
 
     <h2>Dependencies</h2>
 <p>- <a href="http://www.feedparser.org">Universal Feed Parser</a> and <a href="http://chardet.feedparser.org/">Chardet</a><br/>
@@ -79,6 +79,8 @@ type '<b>help</b>' for available commands<br/>
 <b>news:word</b> - searches for news<br/>
 <b>web:word</b> - websearch<br/>
 <b>blip:song</b> - search for songs on blip.fm<br/>
+<b>gnews:word</b> - google news search<br/>
+<b>gweb:word</b> - google web search<br/>
 <b>tlate:word [@source] [#target]</b> - translates the word from @source in @target, default #target is english<br/>
 <b>example:foo</b> - gives you a bla for a foo<br/>
 <b>blog:word</b> - blog search via twingly<br/>
@@ -88,6 +90,10 @@ type '<b>help</b>' for available commands<br/>
 Some commands (news,web) can be combined with lang-codes, like <b>#de</b>, <b>#en</b>, <b>#es</b> etc:<br/>
 <b>news:hamburg #de</b><br/>
 <b>web:xmpp #de</b><br/>
+<br/>
+gnews and gweb can be also combined with lang-codes, like <b>#de</b>, <b>#en</b>, <b>#es</b> etc:<br/>
+<b>gnews:hamburg #de</b><br/>
+<b>gweb:xmpp #de</b><br/>
 <br/>
 A translation can have the source (@) and the target (#) language specified by tags<br/>
 <b>tlate:Wie gehts?  @de #en</b><br/>
