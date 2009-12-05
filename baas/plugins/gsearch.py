@@ -111,7 +111,6 @@ gweb:xmpp #de'''
                 if row.get('publisher'):
                     title = "%s: %s" % (row.get('publisher'), title)
                 title = self.xmlify(self.htmlentities_decode(title))
-                print row['unescapedUrl']
                 result += '<a href="%s">%s</a><br/><br/>' % (self.xmlify(row['unescapedUrl']), title)
         else:
             result += 'No hits found!'
