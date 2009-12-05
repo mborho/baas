@@ -23,7 +23,7 @@ def test_wave_gweb():
 #tests for news search
 def test_xmmp_gnews():   
     result = xmmp.news('%s #de' % 'düsseldorf'.decode('utf-8')) 
-    assert_true(re.search(r"Google news search for d\xfcsseldorf", result), 'no result title found')    
+    assert_true(re.search(r"Google news search for d\xfcsseldorf", result), 'no result title found') 
     assert_true(re.search(r'http://', result), 'no result link found')    
 
 def test_wave_gnews():   

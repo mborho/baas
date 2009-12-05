@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from nose.tools import *
 from tests import pluginWave, pluginXmmp
-import re
 
 xmmp = pluginXmmp.plugins.get('Example')
 wave = pluginWave.plugins.get('Example')
