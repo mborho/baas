@@ -40,7 +40,7 @@ gweb:xmpp #de'''
         searches web by yahoo
         '''
         term = term.strip()
-        lang = None
+        lang = 'en'
 
         if term and term.find('#')+1:
             term, lang = term.split('#',1)

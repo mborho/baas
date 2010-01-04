@@ -122,6 +122,10 @@ class Plugin(object):
         return entity_re.subn(self.substitute_entity, string)[0]
 
     def render(self, data, title='', extra_format=None):
+        """ chooses the right render function, returns raw dict direct """
+        if self.format == "raw":
+            return data
+            
         render_func = 'render_'+self.format
         if extra_format:
             render_func += '_'+extra_format
