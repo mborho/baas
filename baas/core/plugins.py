@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
-import re
 import os
 import new
 import feedparser
 from baas import plugins
-from htmlentitydefs import name2codepoint as n2cp
-import re
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
 
 class PluginLoader(object):
@@ -62,13 +60,6 @@ class PluginLoader(object):
         self.help = "\n".join(help_list)
         self.help += "\n\n%s" % "\n\n".join(help_additional)           
 
-xml_escapes = {
-    '&' : '&amp;',
-    '>' : '&gt;',
-    '<' : '&lt;',
-    #'"' : '&#34;',
-    #"'" : '&#39;'
-}
 
 class Plugin(object):
 
@@ -86,13 +77,13 @@ class Plugin(object):
         """
             Return the given HTML with all tags stripped.
         """
-        return re.sub(r'<[^>]*?>', '', value)        
+        return strip_tags(value)        
 
     def xmlify(self, string):
         """
            makes a string xml valid
         """
-        return re.sub(r'([&<>])', lambda m: xml_escapes[m.group()], self.strip_tags(string))
+        return xmlify(string)
 
     def load_feed(self, url):
         """
@@ -100,29 +91,16 @@ class Plugin(object):
         """
         return feedparser.parse(url)
 
-    def substitute_entity(self, match):
-        ent = match.group(3)
-
-        if match.group(1) == "#":
-            if match.group(2) == '':
-                return unichr(int(ent))
-            elif match.group(2) == 'x':
-                return unichr(int('0x'+ent, 16))
-        else:
-            cp = n2cp.get(ent)
-
-            if cp:
-                return unichr(cp)
-            else:
-                return match.group()
-
     def htmlentities_decode(self, string):
-        """ thanks to http://snippets.dzone.com/posts/show/4569 """
-        entity_re = re.compile(r'&(#?)(x?)(\d{1,5}|\w{1,8});')
-        return entity_re.subn(self.substitute_entity, string)[0]
+        """ 
+            decodes htmlentities 
+        """
+        return htmlentities_decode(string)
 
     def render(self, data, title='', extra_format=None):
-        """ chooses the right render function, returns raw dict direct """
+        """ 
+            chooses the right render function, returns raw dict direct 
+        """
         if self.format == "raw":
             return data
             

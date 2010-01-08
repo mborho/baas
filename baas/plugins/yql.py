@@ -4,6 +4,7 @@
 from urllib import quote_plus
 from baas.core.yqlapi import YQLApi
 from baas.core.plugins import Plugin
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
 class Yql (Plugin):
 
@@ -123,17 +124,17 @@ web:xmpp #de'''
                 result += "(%s) %s : %s\n" % (row['date'],row['title'],row['url'])
         else:
             result += 'No hits found!'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave(self, hits, title):
         '''
         renders the result for wave responses
         '''
-        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if hits:
             for row in hits:
-                title = self.xmlify(row['title'])
-                result += '<a href="%s">%s</a><br/><br/>' % (self.xmlify(row['url']), title)
+                title = xmlify(row['title'])
+                result += '<a href="%s">%s</a><br/><br/>' % (xmlify(row['url']), title)
         else:
             result += 'No hits found!'
         return result
@@ -148,17 +149,17 @@ web:xmpp #de'''
                 result += "%s : %s\n" % (row['title'].replace('Blip.fm | ',''),row['url'])
         else:
             result +='No blips found!'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave_blip(self, hits, title):
         '''
         renders blip search result for wave responses
         '''
-        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if hits:
             for row in hits:
-                title = self.xmlify(row['title'])
-                result += '<a href="%s">%s</a><br/>' % (self.xmlify(row['url']), title)
+                title = xmlify(row['title'])
+                result += '<a href="%s">%s</a><br/>' % (xmlify(row['url']), title)
         else:
             result +='No blips found!'
         return result

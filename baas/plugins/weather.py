@@ -9,6 +9,7 @@ from urllib import quote_plus
 from xml.dom import minidom
 from xml.etree import ElementTree
 from baas.core.plugins import Plugin
+from baas.core.helpers import strip_tags, htmlentities_decode
 
 try:
     # appengine
@@ -112,7 +113,7 @@ class Weather(Plugin):
         for d in f:
             result += '%s: ' % (d['day_of_week'])
             result += '%s (%s°/%s°)\n' % (d['condition'], d['low'], d['high'])
-        return self.strip_tags(result.decode('utf-8'))
+        return strip_tags(result.decode('utf-8'))
 
     def render_wave(self, data, title):
         '''
@@ -121,22 +122,22 @@ class Weather(Plugin):
         i = data.get('info')
         if i:
             result = " <br/><br/>"
-            result += '<b>%s</b>:<br/><br/>' % (self.htmlentities_decode(i.get('city')))#, i.get('current_date_time'))
+            result += '<b>%s</b>:<br/><br/>' % (htmlentities_decode(i.get('city')))#, i.get('current_date_time'))
             c = data.get('current')
             if c.get('condition'): 
-                result += '%s, ' % self.htmlentities_decode(c.get('condition'))
+                result += '%s, ' % htmlentities_decode(c.get('condition'))
             result += '%s°C/%s°F, %s<br/>%s<br/><br/>' % (
                     c.get('temp_c'),
                     c.get('temp_f'),
-                    self.htmlentities_decode(c.get('humidity')), 
-                    self.htmlentities_decode(c.get('wind_condition'))
+                    htmlentities_decode(c.get('humidity')), 
+                    htmlentities_decode(c.get('wind_condition'))
                     )
             f = data.get('forecast')
             for day in f:
                 #icon = '<img src="http://google.com%s" alt="" />' % day['icon']
                 result += '%s: %s (%s°/%s°)<br/>' % (
-                    self.htmlentities_decode(day['day_of_week']),
-                    self.htmlentities_decode(day['condition']), 
+                    htmlentities_decode(day['day_of_week']),
+                    htmlentities_decode(day['condition']), 
                     day['low'], 
                     day['high']
                     )        

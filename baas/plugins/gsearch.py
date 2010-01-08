@@ -4,6 +4,7 @@
 from urllib import quote_plus
 from baas.core.yqlapi import YQLApi
 from baas.core.plugins import Plugin
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
 class Gsearch (Plugin):
 
@@ -95,23 +96,23 @@ gweb:xmpp #de'''
                 title = row['titleNoFormatting']
                 if row.get('publisher'):
                     title = "%s: %s" % (row.get('publisher'), title)
-                result += "%s - %s\n" % (self.htmlentities_decode(title), row['unescapedUrl'])
+                result += "%s - %s\n" % (htmlentities_decode(title), row['unescapedUrl'])
         else:
             result += 'No hits found!'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave(self, hits, title):
         '''
         renders the result for wave responses
         '''
-        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if hits:
             for row in hits:
                 title = row['titleNoFormatting']
                 if row.get('publisher'):
                     title = "%s: %s" % (row.get('publisher'), title)
-                title = self.xmlify(self.htmlentities_decode(title))
-                result += '<a href="%s">%s</a><br/><br/>' % (self.xmlify(row['unescapedUrl']), title)
+                title = xmlify(htmlentities_decode(title))
+                result += '<a href="%s">%s</a><br/><br/>' % (xmlify(row['unescapedUrl']), title)
         else:
             result += 'No hits found!'
         return result

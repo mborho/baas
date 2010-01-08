@@ -2,6 +2,7 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from baas.core.plugins import Plugin
+from baas.core.helpers import strip_tags, xmlify
 
 class Example(Plugin):
 
@@ -37,10 +38,10 @@ class Example(Plugin):
     def render_xmpp(self, data, title):
         #result = title+"\n" #Would be the title
         result = data
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave(self, data, title):
         #Would be the title
         result = " <br/><br/>" #<b>%s</b><br/>" % self.xmlify(title)
-        result += "<b>%s</b>" % self.xmlify(data)
+        result += "<b>%s</b>" % xmlify(data)
         return result

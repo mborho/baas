@@ -3,6 +3,7 @@
 # GPL - see License.txt for details
 from urllib import quote_plus
 from baas.core.plugins import Plugin
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
 class Twingly(Plugin):
 
@@ -79,22 +80,22 @@ class Twingly(Plugin):
                 if desc != '':
                     result += ': %s' % desc
                 result += '%s\n' % row["link"]
-            result = self.htmlentities_decode(result)
+            result = htmlentities_decode(result)
         else:
             result += 'No sites found!'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave_blog(self, data, title):
         '''
         renders the blog result for wave responses
         '''
-        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if data:
             for row in data:
-                result += '<a href="%s">%s</a><br/>' % (self.xmlify(row["link"]), self.xmlify(row["title"]))
+                result += '<a href="%s">%s</a><br/>' % (xmlify(row["link"]), xmlify(row["title"]))
                 desc = row["summary"] if len(row["summary"]) > 0 else None
                 if desc:
-                    result += "%s<br/>" % self.xmlify(self.htmlentities_decode(desc))
+                    result += "%s<br/>" % xmlify(htmlentities_decode(desc))
                 result += '<br/>'
         else:
             result += 'No sites found!'
@@ -112,19 +113,19 @@ class Twingly(Plugin):
                 if desc != '':
                     result += ': %s' % desc
                 result += '%s\n' % row["link"]
-            result = self.htmlentities_decode(result)
+            result = htmlentities_decode(result)
         else:
             result += 'No sites found!'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave_microblog(self, data, title):
         '''
         renders the microblog result for wave responses
         '''
-        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if data:
             for row in data:
-                result += '%s <a href="%s">link</a><br/><br/>' % (self.xmlify(row["title"]), self.xmlify(row["link"]))
+                result += '%s <a href="%s">link</a><br/><br/>' % (xmlify(row["title"]), xmlify(row["link"]))
         else:
             result += 'No sites found!'
         return result 

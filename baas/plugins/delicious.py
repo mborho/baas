@@ -4,7 +4,7 @@
 from urllib import quote_plus
 from baas.core.yqlapi import YQLApi
 from baas.core.plugins import Plugin
-from baas.core.helpers import format_pub_date
+from baas.core.helpers import format_pub_date, strip_tags, xmlify
 
 class Delicious (Plugin):
 
@@ -56,17 +56,17 @@ class Delicious (Plugin):
                 result += "(%s) %s : %s\n" % (format_pub_date(row['pubDate'],'%Y/%m/%d'), row['title'],row['link'])
         else:
             result += 'No hits found!'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave(self, hits, title):
         '''
         renders the result for wave responses
         '''
-        result = " <br/><br/><b>%s</b><br/>" % self.xmlify(title)
+        result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if hits:
             for row in hits:
-                title = self.xmlify(row['title'])
-                result += '<a href="%s">%s (%s)</a><br/><br/>' % (self.xmlify(row['link']), title,\
+                title = xmlify(row['title'])
+                result += '<a href="%s">%s (%s)</a><br/><br/>' % (xmlify(row['link']), title,\
                 format_pub_date(row['pubDate'],'%Y/%m/%d'))
         else:
             result += 'No hits found!'

@@ -5,6 +5,7 @@ import urllib2
 import re
 from urllib import quote_plus
 from baas.core.plugins import Plugin
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
 try:
     # appengine
@@ -81,10 +82,10 @@ tlate:How do you do? #de'''
         renders the result for xmpp responses
         '''
         if data.get('text'):
-            result = '%s (%s => %s)' % (self.htmlentities_decode(data.get('text')), data.get('detected_lang'), data.get('lang'))
+            result = '%s (%s => %s)' % (htmlentities_decode(data.get('text')), data.get('detected_lang'), data.get('lang'))
         else:
             result = 'Text translation failed'
-        return self.strip_tags(result)
+        return strip_tags(result)
 
     def render_wave(self, data, title):
         '''
@@ -93,7 +94,7 @@ tlate:How do you do? #de'''
         result = " <br/><br/>"
         if data.get('text'):
             result += '<b>%s</b> <i>(%s =&gt; %s)</i>' \
-                % (self.xmlify(self.htmlentities_decode(data.get('text'))),
+                % (xmlify(htmlentities_decode(data.get('text'))),
                     data.get('detected_lang'), data.get('lang'))
         else:
             result += 'Text translation failed'
