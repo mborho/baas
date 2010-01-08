@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
-from urllib import quote_plus
-from baas.core.yqlapi import YQLApi
+from urllib import urlencode, quote_plus
+import urllib2
 from baas.core.plugins import Plugin
 from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
+
+try:
+    # appengine
+    from django.utils import simplejson
+except:
+    import simplejson
 
 class Gsearch (Plugin):
 
@@ -28,9 +34,20 @@ gweb:xmpp #de'''
             'additional': [additional],
         }
 
+    def _api_request(self, mode, params):
+            
+        api_url = 'http://ajax.googleapis.com/ajax/services/search/'+mode+'?%s' % (params)
+        
+        req = urllib2.Request(api_url)
+        response = urllib2.urlopen(req).read()
+        api_response  = simplejson.loads(response)
+        if api_response.get('responseStatus') == 200:
+            return api_response
+        else:
+            return None
+
     def _extract_hits(self, result):
-        hits = result.get('results') if result else None
-    
+        hits = result.get('responseData',{}).get('results')
         # handle single result
         if type(hits) == dict:
             hits = [hits]
@@ -47,15 +64,15 @@ gweb:xmpp #de'''
             term, lang = term.split('#',1)
             term = term.strip()
 
-        if term == '':
-            return "Please specify your search term"
-
-        query = 'select * from google.search(0,8) where q="%s"' % term
-        if lang:
-            query += ' AND gl="%s"' % (lang)
-
-        yql_api = YQLApi(community=True)
-        response = yql_api.request(query=query)
+        params = urlencode( {
+                'v':'1.0', 
+                'q':term.encode('utf-8').lower(),
+                'hl':lang, 
+                'gl':lang,
+                'rsz':'large',
+                }
+        )
+        response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
         title = 'Web search for %s\n' % term
@@ -72,15 +89,15 @@ gweb:xmpp #de'''
             term, lang = term.split('#',1)
             term = term.strip()
 
-        if term == '':
-            return "Please specify your search term"
-
-        query = 'select * from google.news(0,8) where q="%s"' % term
-        if lang:
-            query += ' AND ned="%s"' % (lang)
-
-        yql_api = YQLApi(community=True)
-        response = yql_api.request(query=query)
+        params = urlencode( {
+                'v':'1.0', 
+                'q':term.encode('utf-8').lower(),
+                'ned':lang, 
+                'rsz':'large',
+                #'scoring':'d',
+                }
+        )
+        response = self._api_request('news', params)
         hits = self._extract_hits(response)
 
         title = 'Google news search for %s\n' % term
