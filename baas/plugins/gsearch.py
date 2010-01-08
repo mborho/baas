@@ -36,8 +36,9 @@ gweb:xmpp #de'''
 
     def _api_request(self, mode, params):
             
-        api_url = 'http://ajax.googleapis.com/ajax/services/search/'+mode+'?%s' % (params)
-        
+        url_params = urlencode( params )
+        api_url = 'http://ajax.googleapis.com/ajax/services/search/'+mode+'?%s' % (url_params)
+
         req = urllib2.Request(api_url)
         response = urllib2.urlopen(req).read()
         api_response  = simplejson.loads(response)
@@ -47,11 +48,14 @@ gweb:xmpp #de'''
             return None
 
     def _extract_hits(self, result):
-        hits = result.get('responseData',{}).get('results')
-        # handle single result
-        if type(hits) == dict:
-            hits = [hits]
-        return hits
+        if result:
+            hits = result.get('responseData',{}).get('results')
+            # handle single result
+            if type(hits) == dict:
+                hits = [hits]
+            return hits
+        else:
+            return None
          
     def web(self, term):
         '''
@@ -64,14 +68,14 @@ gweb:xmpp #de'''
             term, lang = term.split('#',1)
             term = term.strip()
 
-        params = urlencode( {
+        params = {
                 'v':'1.0', 
                 'q':term.encode('utf-8').lower(),
                 'hl':lang, 
                 'gl':lang,
                 'rsz':'large',
                 }
-        )
+
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
@@ -89,14 +93,16 @@ gweb:xmpp #de'''
             term, lang = term.split('#',1)
             term = term.strip()
 
-        params = urlencode( {
+        params = {
                 'v':'1.0', 
                 'q':term.encode('utf-8').lower(),
-                'ned':lang, 
                 'rsz':'large',
                 #'scoring':'d',
                 }
-        )
+
+        if lang: 
+            params['ned'] = lang
+
         response = self._api_request('news', params)
         hits = self._extract_hits(response)
 
