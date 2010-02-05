@@ -33,9 +33,11 @@ class YQLApi(object):
         final_url = base_url % (yql_query)
         
         if self.community:            
-            final_url += '&env='+urllib.quote_plus('store://datatables.org/alltableswithkeys')
-        
-        response=urllib.urlopen(final_url)
+            final_url += '&env='+urllib.quote_plus('store://datatables.org/alltableswithkeys')       
+
+        req = urllib2.Request(final_url)
+        response = urllib2.urlopen(req)
+
         api_data=simplejson.load(response)
         result = api_data.get('query',{}).get('results',{})
 
