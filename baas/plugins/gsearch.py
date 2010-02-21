@@ -71,10 +71,16 @@ gweb:xmpp #de'''
         params = {
                 'v':'1.0', 
                 'q':term.encode('utf-8').lower(),
-                'hl':lang, 
-                'gl':lang,
                 'rsz':'large',
                 }
+
+        if lang.startswith('lang_'):
+            # specific lang code
+            params['lr'] = lang
+        else:
+            # short lang code
+            params['hl'] = lang 
+            params['gl'] = lang
 
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
