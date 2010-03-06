@@ -18,7 +18,10 @@ class Gsearch (Plugin):
         """
             returns the command map for the plugin
         """
-        cmd_map = [('gnews',self.news), ('gweb', self.web)]
+        cmd_map = [
+            ('gnews',self.news), 
+            ('gweb', self.web),
+            ('metacritic', self.metacritic)]
         return cmd_map
 
     def get_help(self):
@@ -30,7 +33,10 @@ gnews:hamburg #de
 gweb:xmpp #de'''
 
         return {
-            'commands': ['gnews:word - google news search','gweb:word - google web search'],
+            'commands': [
+                'gnews:word - google news search',
+                'gweb:word - google web search',
+                'metacritic:title - search for reviews on metacritc.com'],
             'additional': [additional],
         }
 
@@ -113,6 +119,26 @@ gweb:xmpp #de'''
         hits = self._extract_hits(response)
 
         title = 'Google news search for %s\n' % term
+        return self.render(data=hits, title=title)        
+
+
+    def metacritic(self, term):
+        '''
+        searches metacritic
+        '''
+        term = term.strip()
+
+        query = 'site:metacritic.com intitle:reviews intitle:"%s"' % term
+        params = {
+                'v':'1.0', 
+                'q':query.encode('utf-8').lower(),
+                'rsz':'large',
+                }
+       
+        response = self._api_request('web', params)
+        hits = self._extract_hits(response)
+
+        title = 'Reviews for "%s"\n' % term
         return self.render(data=hits, title=title)        
         
     def render_xmpp(self, hits, title):

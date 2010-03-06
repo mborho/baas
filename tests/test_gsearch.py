@@ -34,3 +34,16 @@ def test_wave_gnews():
         'no result title found')    
     assert_true(re.search(r'">[^<]*D\xfcsseldorf[^<]*</a>', result),
         'no result found')
+
+#tests for metacric
+def test_xmmp_metacritc():   
+    result = xmmp.metacritic('it crowd') 
+    assert_true(re.search(r'Reviews for "it crowd"', result), 'no result title found') 
+    assert_true(re.search(r'http://', result), 'no result link found')    
+
+def test_wave_metacritic():   
+    result = wave.metacritic('halo') 
+    assert_true(re.search(r'<br/><br/><b>Reviews for "halo"', result), 
+        'no result title found')    
+    assert_true(re.search(r'platforms/xbox360/halo3">Halo 3 \(xbox360\) reviews at Metacritic.com', result),
+        'no result found')
