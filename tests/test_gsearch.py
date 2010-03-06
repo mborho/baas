@@ -47,3 +47,16 @@ def test_wave_metacritic():
         'no result title found')    
     assert_true(re.search(r'platforms/xbox360/halo3">Halo 3 \(xbox360\) reviews at Metacritic.com', result),
         'no result found')
+
+#tests for imdb
+def test_xmmp_imdb():   
+    result = xmmp.imdb('Bastards #en') 
+    assert_true(re.search(r'Results on IMDb for "Bastards"', result), 'no result title found') 
+    assert_true(re.search(r'Bastards of the Party \(2005\)', result), 'no hit found')
+    assert_true(re.search(r'http://', result), 'no result link found')    
+
+def test_wave_imdb():   
+    result = wave.imdb('%s #de' % 'Köln'.decode('utf-8')) 
+    assert_true(re.search(r'<br/><br/><b>Results on IMDb for "K\xf6ln"', result), 
+        'no result title found')    
+    assert_true(re.search(r'>"SOKO K\xf6ln"', result),'no result found')

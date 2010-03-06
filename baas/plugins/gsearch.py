@@ -21,7 +21,8 @@ class Gsearch (Plugin):
         cmd_map = [
             ('gnews',self.news), 
             ('gweb', self.web),
-            ('metacritic', self.metacritic)]
+            ('metacritic', self.metacritic),
+            ('imdb', self.imdb)]
         return cmd_map
 
     def get_help(self):
@@ -30,13 +31,17 @@ class Gsearch (Plugin):
         """
         additional = '''gnews and gweb can be also combined with lang-codes, like #de, #en, #es etc:
 gnews:hamburg #de
-gweb:xmpp #de'''
+gweb:xmpp #de
+
+IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
+'''
 
         return {
             'commands': [
                 'gnews:word - google news search',
                 'gweb:word - google web search',
-                'metacritic:title - search for reviews on metacritc.com'],
+                'metacritic:title - search for reviews on metacritc.com',
+                'imdb:title - search for movie on IMDb'],
             'additional': [additional],
         }
 
@@ -121,7 +126,6 @@ gweb:xmpp #de'''
         title = 'Google news search for %s\n' % term
         return self.render(data=hits, title=title)        
 
-
     def metacritic(self, term):
         '''
         searches metacritic
@@ -141,6 +145,33 @@ gweb:xmpp #de'''
         title = 'Reviews for "%s"\n' % term
         return self.render(data=hits, title=title)        
         
+    def imdb(self, term):
+        '''
+        searches metacritic
+        '''
+        term = term.strip()
+
+        lang = None
+
+        if term and term.find('#')+1:
+            term, lang = term.split('#',1)
+            term = term.strip()
+
+        tld = lang if lang != 'en' or not lang else 'com' 
+
+        query = 'site:imdb.%s inurl:"/title/" intitle:"%s"' % (tld, term)
+        params = {
+                'v':'1.0', 
+                'q':query.encode('utf-8').lower(),
+                'rsz':'large',
+                }
+       
+        response = self._api_request('web', params)
+        hits = self._extract_hits(response)
+
+        title = 'Results on IMDb for "%s"\n' % term
+        return self.render(data=hits, title=title)        
+
     def render_xmpp(self, hits, title):
         '''
         renders the result for xmpp responses
