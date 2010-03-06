@@ -49,11 +49,11 @@
       <span class="small">by <a href="http://github.com/mborho">mborho</a></span></h1>
 
     <div class="description">
-      <p>"Buddy as a Service" is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches and some other stuff (translations, weather forecast, etc) for you.</p>
+      <p>"Buddy as a Service" is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches (web, news, reviews, wikipedia, imdb) and some other stuff (translations, weather forecast, etc) for you.</p>
      <p>The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins. No API-Keys are required!</p>
     </div>
 
-    <h2>Version 0.1.5</h2>
+    <h2>Version 0.1.6.1</h2>
 
     <h2>Dependencies</h2>
 <p>- <a href="http://www.feedparser.org">Universal Feed Parser</a> and <a href="http://chardet.feedparser.org/">Chardet</a><br/>
@@ -81,6 +81,9 @@ type '<b>help</b>' for available commands<br/>
 <b>blip:song</b> - search for songs on blip.fm<br/>
 <b>gnews:word</b> - google news search<br/>
 <b>gweb:word</b> - google web search<br/>
+<b>metacritic:title</b> - search for reviews on metacritc.com<br/>
+<b>imdb:title</b> - search for movie on IMDb<br/>
+<b>wikipedia:thing</b> - search on wikipedia<br/>
 <b>tlate:word [@source] [#target]</b> - translates the word from @source in @target, default #target is english<br/>
 <b>example:foo</b> - gives you a bla for a foo<br/>
 <b>blog:word</b> - blog search via twingly<br/>
@@ -94,6 +97,9 @@ Some commands (news,web) can be combined with lang-codes, like <b>#de</b>, <b>#e
 gnews and gweb can be also combined with lang-codes, like <b>#de</b>, <b>#en</b>, <b>#es</b> etc:<br/>
 <b>gnews:hamburg #de</b><br/>
 <b>gweb:xmpp #de</b><br/>
+<br/>
+<b>IMDb</b> search can be narrowed down with <b>#en, #de, #es, #pt, #it</b> or <b>#fr</b><br/>
+The different <b>wikipedia</b> versions can be selected via <b>#en, #de, #fr</b> etc.<br/>
 <br/>
 A translation can have the source (@) and the target (#) language specified by tags<br/>
 <b>tlate:Wie gehts?  @de #en</b><br/>
