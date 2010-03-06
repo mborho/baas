@@ -69,7 +69,10 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
             return hits
         else:
             return None
-         
+
+    def _build_query_term(self, term):
+        return 'intitle:' + ' intitle:'.join(term.split())+' '
+
     def web(self, term):
         '''
         searches web by yahoo
@@ -134,13 +137,14 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         '''
         term = term.strip()
 
-        query = 'site:metacritic.com intitle:reviews intitle:"%s"' % term
+        
+        query = 'site:metacritic.com intitle:reviews %s' % self._build_query_term(term)
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
                 'rsz':'large',
                 }
-       
+
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
@@ -161,7 +165,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
 
         tld = lang if lang != 'en' or not lang else 'com' 
 
-        query = 'site:imdb.%s inurl:"/title/" intitle:"%s"' % (tld, term)
+        query = 'site:imdb.%s inurl:"/title/" %s' % (tld, self._build_query_term(term))
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
@@ -185,7 +189,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
             term, lang = term.split('#',1)
             term = term.strip()
 
-        query = 'site:%s.wikipedia.org inurl:"/wiki/" intitle:"%s"' % (lang, term)
+        query = 'site:%s.wikipedia.org inurl:"/wiki/" %s' % (lang, term)
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
