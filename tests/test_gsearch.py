@@ -60,3 +60,16 @@ def test_wave_imdb():
     assert_true(re.search(r'<br/><br/><b>Results on IMDb for "K\xf6ln"', result), 
         'no result title found')    
     assert_true(re.search(r'>"SOKO K\xf6ln"', result),'no result found')
+
+#tests for wikipedia
+def test_xmmp_wpedia():   
+    result = xmmp.wikipedia('Madrid #es') 
+    assert_true(re.search(r'Wikipedia entries for "Madrid"', result), 'no result title found') 
+    assert_true(re.search(r'Madrid - Wikipedia, la enciclopedia libre', result), 'no hit found')
+    assert_true(re.search(r'http://', result), 'no result link found')    
+
+def test_wave_wpedia():   
+    result = wave.wikipedia('%s #de' % 'Köln'.decode('utf-8')) 
+    assert_true(re.search(r'<br/><br/><b>Wikipedia entries for "K\xf6ln"', result), 
+        'no result title found')    
+    assert_true(re.search(r'http://de.wikipedia.org/wiki/', result),'no result found')

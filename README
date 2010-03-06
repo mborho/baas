@@ -1,4 +1,4 @@
-Buddy as a Service (baas) is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches and some other stuff (translations, weather forecast, etc) for you.
+Buddy as a Service (baas) is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches (web, news, reviews, wikipedia, imdb) and some other stuff (translations, weather forecast, etc) for you.
 
 The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins. No API Keys required!
 
@@ -31,6 +31,9 @@ web:word - websearch
 blip:song - search for songs on blip.fm
 gnews:word - google news search
 gweb:word - google web search
+metacritic:title - search for reviews on metacritc.com
+imdb:title - search for movie on IMDb
+wikipedia:thing - search on wikipedia
 tlate:word [@source] [#target] - translates the word from @source in @target, default #target is english
 example:foo - gives you a bla for a foo
 blog:word - blog search via twingly
@@ -44,6 +47,9 @@ web:xmpp #de
 gnews and gweb can be also combined with lang-codes, like #de, #en, #es etc:
 gnews:hamburg #de
 gweb:xmpp #de
+
+IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
+The different wikipedia versions can be selected via #en, #de, #fr etc.
 
 A translation can have the source (@) and the target (#) language specified by tags
 tlate:Wie gehts?  @de #en

@@ -71,7 +71,7 @@ class Bot(object):
                 reply += "\n\n%s" % self.pluginHnd.help
 
         except:
-            reply = getTraceback()
+            reply = "Error occured"
 
         response = domish.Element((None, 'message'))
         response['to'] = user

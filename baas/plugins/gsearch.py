@@ -22,7 +22,8 @@ class Gsearch (Plugin):
             ('gnews',self.news), 
             ('gweb', self.web),
             ('metacritic', self.metacritic),
-            ('imdb', self.imdb)]
+            ('imdb', self.imdb),
+            ('wikipedia', self.wikipedia)]
         return cmd_map
 
     def get_help(self):
@@ -34,14 +35,15 @@ gnews:hamburg #de
 gweb:xmpp #de
 
 IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
-'''
+The different wikipedia versions can be selected via #en, #de, #fr etc.'''
 
         return {
             'commands': [
                 'gnews:word - google news search',
                 'gweb:word - google web search',
                 'metacritic:title - search for reviews on metacritc.com',
-                'imdb:title - search for movie on IMDb'],
+                'imdb:title - search for movie on IMDb',
+                'wikipedia:thing - search on wikipedia'],
             'additional': [additional],
         }
 
@@ -171,6 +173,32 @@ IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
 
         title = 'Results on IMDb for "%s"\n' % term
         return self.render(data=hits, title=title)        
+
+    def wikipedia(self, term):
+        '''
+        searches metacritic
+        '''
+        term = term.strip()
+        lang = 'en'
+
+        if term and term.find('#')+1:
+            term, lang = term.split('#',1)
+            term = term.strip()
+
+        query = 'site:%s.wikipedia.org inurl:"/wiki/" intitle:"%s"' % (lang, term)
+        params = {
+                'v':'1.0', 
+                'q':query.encode('utf-8').lower(),
+                'rsz':'large',
+                }
+       
+        response = self._api_request('web', params)
+        hits = self._extract_hits(response)
+
+        title = 'Wikipedia entries for "%s"\n' % term
+        return self.render(data=hits, title=title)    
+
+
 
     def render_xmpp(self, hits, title):
         '''
