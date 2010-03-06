@@ -136,7 +136,6 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         searches metacritic
         '''
         term = term.strip()
-
         
         query = 'site:metacritic.com intitle:reviews %s' % self._build_query_term(term)
         params = {
@@ -163,7 +162,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
             term, lang = term.split('#',1)
             term = term.strip()
 
-        tld = lang if lang != 'en' or not lang else 'com' 
+        tld = lang if lang and lang != 'en' else 'com' 
 
         query = 'site:imdb.%s inurl:"/title/" %s' % (tld, self._build_query_term(term))
         params = {
