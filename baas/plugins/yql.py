@@ -50,8 +50,11 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
+        # handle single and double quotes
+        term = term.replace("'",'"')
+
         query = 'select title,url,date '
-        query += 'from search.web where query="%s" ' % term
+        query += 'from search.web where query=\'%s\' ' % term
 
         if lang:
             query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
@@ -77,8 +80,11 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
+        # handle single and double quotes
+        term = term.replace("'",'"')
+
         query = 'select title,url,date '
-        query += 'from search.news where query="%s" ' % term
+        query += 'from search.news where query=\'%s\' ' % term
 
         if lang:
             query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
