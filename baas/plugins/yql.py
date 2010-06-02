@@ -53,7 +53,7 @@ web:xmpp #de'''
         # handle single and double quotes
         term = term.replace("'",'"')
 
-        query = 'select title,url,date '
+        query = 'select title,url,date,abstract '
         query += 'from search.web where query=\'%s\' ' % term
 
         if lang:
@@ -83,7 +83,7 @@ web:xmpp #de'''
         # handle single and double quotes
         term = term.replace("'",'"')
 
-        query = 'select title,url,date '
+        query = 'select title,url,date,abstract '
         query += 'from search.news where query=\'%s\' ' % term
 
         if lang:

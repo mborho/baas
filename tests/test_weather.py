@@ -14,5 +14,5 @@ def test_xmmp_forecast():
 
 def test_wave_forecast():   
     result = wave.forecast('köln #de'.decode('utf-8')) 
-    assert_true(re.match(r'^ <br/><br/><b>Cologne, NRW</b>', result), 'No forecast title found')
+    assert_true(re.match(r'^ <br/><br/><b>Cologne, North Rhine-Westphalia</b>', result), 'No forecast title found')
     assert_true(re.search(r'Feuchtigkeit:', result), 'No forecast found')

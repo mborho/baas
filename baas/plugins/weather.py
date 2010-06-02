@@ -4,7 +4,6 @@
 import urllib2
 import urllib
 import re
-import chardet
 from urllib import quote_plus
 from xml.dom import minidom
 from xml.etree import ElementTree
@@ -36,6 +35,7 @@ class Weather(Plugin):
 
     def _fix_invalid_xml(self, xml):
         #0xA0 0x25 0x22 0x2F
+        import chardet
         encoding = chardet.detect(xml)['encoding']
         xml = xml.decode(encoding).encode('utf-8')            
         return xml
