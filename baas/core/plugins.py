@@ -4,6 +4,7 @@
 import os
 import new
 import feedparser
+import re
 from baas import plugins
 from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
@@ -16,6 +17,7 @@ class PluginLoader(object):
         self.plugins = {}
         self.help = ''
         self.commands = {}
+        self.limits = {}
 
     def load_plugins(self):
         """
@@ -39,6 +41,16 @@ class PluginLoader(object):
                 for (cmd,func) in cmd_map:
                     self.commands[cmd] = func
 
+    def load_limits(self):
+        """
+            combines command map
+        """
+        for name in self.plugins:
+            limit_map = self.plugins[name].get_limits()
+            if limit_map:
+                for (cmd,limit) in limit_map:
+                    self.limits[cmd] = limit
+                    
     def load_help(self):
         """
             combines help text, retrieved from the plugins
@@ -59,20 +71,36 @@ class PluginLoader(object):
 
         self.help = "\n".join(help_list)
         self.help += "\n\n%s" % "\n\n".join(help_additional)           
-
-
+        
 class Plugin(object):
 
     def __init__(self, config, format='xmpp'):
         self.config = config
         self.format = format
+        self.result_limit = None
 
     def get_map(self):
         return None
 
+    def get_limits(self):
+        return None
+
     def get_help(self):
         return None
-    
+
+    def extract_page_param(self, term):
+        """
+            extract optional page paramter from term
+        """
+        page = 1
+        pgrep = re.search('.*\[([0-9]+)]$', term)
+        if pgrep:
+            page_num = int(pgrep.group(1))
+            term = term[0:-len('[%d]' % page_num)].strip()
+            if page_num > 0:
+                page = page_num
+        return (term, page)
+
     def strip_tags(self, value):
         """
             Return the given HTML with all tags stripped.

@@ -14,6 +14,10 @@ except:
 
 class Gsearch (Plugin):
 
+    def __init__(self, config, format='xmpp'):
+        super(Gsearch,self).__init__(config, format)
+        self.result_limit = 8
+        
     def get_map(self):
         """
             returns the command map for the plugin
@@ -26,6 +30,19 @@ class Gsearch (Plugin):
             ('wikipedia', self.wikipedia)]
         return cmd_map
 
+    def get_limits(self):
+        """
+            returns the limit map for the plugin commands
+            for e.g. several result pages
+        """
+        limit_map = [
+            ('gnews',self.result_limit), 
+            ('gweb', self.result_limit),
+            ('metacritic', self.result_limit),
+            ('imdb', self.result_limit),
+            ('wikipedia', self.result_limit)]
+        return limit_map
+        
     def get_help(self):
         """
             returns the help text for the plugin
@@ -79,17 +96,21 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         '''
         term = term.strip()
         lang = 'en'
+        page = 1
 
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
 
         params = {
                 'v':'1.0', 
                 'q':term.encode('utf-8').lower(),
                 'rsz':'large',
+                'start':(page-1)*self.result_limit
                 }
-
+        
         if lang.startswith('lang_'):
             # specific lang code
             params['lr'] = lang
@@ -111,14 +132,17 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         term = term.strip()
         lang = None
 
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
 
         params = {
                 'v':'1.0', 
                 'q':term.encode('utf-8').lower(),
                 'rsz':'large',
+                'start':(page-1)*self.result_limit
                 #'scoring':'d',
                 }
 
@@ -136,12 +160,15 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         searches metacritic
         '''
         term = term.strip()
-        
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            
         query = 'site:metacritic.com intitle:reviews %s' % self._build_query_term(term)
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
                 'rsz':'large',
+                'start':(page-1)*self.result_limit
                 }
 
         response = self._api_request('web', params)
@@ -158,9 +185,11 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
 
         lang = None
 
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
 
         tld = lang if lang and lang != 'en' else 'com' 
 
@@ -169,6 +198,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
                 'rsz':'large',
+                'start':(page-1)*self.result_limit                
                 }
        
         response = self._api_request('web', params)
@@ -184,15 +214,18 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         term = term.strip()
         lang = 'en'
 
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
 
         query = 'site:%s.wikipedia.org inurl:"/wiki/" %s' % (lang, term)
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
                 'rsz':'large',
+                'start':(page-1)*self.result_limit
                 }
        
         response = self._api_request('web', params)

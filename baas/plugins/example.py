@@ -6,6 +6,12 @@ from baas.core.helpers import strip_tags, xmlify
 
 class Example(Plugin):
 
+    def __init__(self, config, format='xmpp'):
+        # call parent init
+        super(Example,self).__init__(config, format)
+        # set plugin related instance variables
+        self.blafasel = None
+        
     def get_map(self):
         """
             returns the command map for the plugin

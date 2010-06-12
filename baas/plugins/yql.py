@@ -8,6 +8,10 @@ from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
 
 class Yql (Plugin):
 
+    def __init__(self, config, format='xmpp'):
+        super(Yql,self).__init__(config, format)
+        self.result_limit = 10
+        
     def get_map(self):
         """
             returns the command map for the plugin
@@ -15,6 +19,13 @@ class Yql (Plugin):
         cmd_map = [('news',self.search_news), ('web', self.search_web), ('blip',self.search_blip)]
         return cmd_map
 
+    def get_limits(self):
+        """
+            returns the limit map for the plugin commands
+        """
+        limit_map = [('news',self.result_limit), ('web', self.result_limit),('blip', self.result_limit)]            
+        return limit_map
+        
     def get_help(self):
         """
             returns the help text for the plugin
@@ -28,6 +39,9 @@ web:xmpp #de'''
             'additional': [additional],
         }
 
+    def _get_offset(self, page):
+        return (page-1)*self.result_limit
+        
     def _extract_hits(self, result):
         hits = result.get('result') if result else None
     
@@ -42,10 +56,12 @@ web:xmpp #de'''
         '''
         term = term.strip()
         lang = None
-
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        page = 1
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
 
         if term == '':
             return "Please specify your search term"
@@ -54,7 +70,7 @@ web:xmpp #de'''
         term = term.replace("'",'"')
 
         query = 'select title,url,date,abstract '
-        query += 'from search.web where query=\'%s\' ' % term
+        query += 'from search.web(%d,%d) where query=\'%s\' ' % (self._get_offset(page), self.result_limit, term)
 
         if lang:
             query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
@@ -72,10 +88,12 @@ web:xmpp #de'''
         '''
         term = term.strip()
         lang = None
-
-        if term and term.find('#')+1:
-            term, lang = term.split('#',1)
-            term = term.strip()
+        page = 1
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
 
         if term == '':
             return "Please specify your search term"
@@ -84,13 +102,13 @@ web:xmpp #de'''
         term = term.replace("'",'"')
 
         query = 'select title,url,date,abstract '
-        query += 'from search.news where query=\'%s\' ' % term
+        query += 'from search.news(%d,%d) where query=\'%s\' ' % (self._get_offset(page), self.result_limit, term)
 
         if lang:
             query += ' AND region="%s" AND lang="%s" ' % (lang, lang)
 
         query += '| sort(field="age")'
-
+        
         yql_api = YQLApi()
         response = yql_api.request(query=query)        
         hits = self._extract_hits(response)
@@ -108,10 +126,12 @@ web:xmpp #de'''
         if term == '':
             return "Please specify your search term"
 
+        (term, page) = self.extract_page_param(term) 
+            
         yterm = 'intitle:"%s" site:blip.fm inurl:profile -intitle:"Props given" -intitle:"Favourite DJs" \
                 -intitle:"Blip.fm %s"' % (term, term)
 
-        query = 'select title,url from search.web(0,15) '
+        query = 'select title,url from search.web(%d,%d) ' % (self._get_offset(page), self.result_limit)
         query += "WHERE query = '%s'" % yterm
 
         yql_api = YQLApi()

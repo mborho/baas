@@ -2,18 +2,45 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from nose.tools import *
-from tests import pluginWave, pluginXmmp
+from tests import pluginWave, pluginXmmp, pluginRaw
 import re
 
 xmmp = pluginXmmp.plugins.get('Gsearch')
 wave = pluginWave.plugins.get('Gsearch')
+raw = pluginRaw.plugins.get('Gsearch')
 
+# test result size limits
+def test_limits():    
+    assert_equal(8, raw.result_limit,  'result size incorrect')    
+    for cmd in pluginRaw.limits:
+        if cmd not in  ['gnews','wikipedia','gweb','metacritic','imdb']: continue
+        assert_equal(pluginRaw.limits[cmd], raw.result_limit ,'result_size for %s incorrect' % cmd)        
+    
 #tests for web search
 def test_xmmp_gweb():   
     result = xmmp.web('%s #de' % 'düsseldorf'.decode('utf-8'))    
     assert_true(re.search(r"Web search for d\xfcsseldorf", result), 
         'no result title found')    
     assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result), 'no result found')    
+
+def test_xmmp_limits():   
+    # test several page params
+    result0 = xmmp.web('%s #de [0]' % 'düsseldorf'.decode('utf-8'))    
+    assert_true(re.search(r"Web search for d\xfcsseldorf", result0), 'no result title found')    
+    assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result0), 'no result found')    
+    
+    result1 = xmmp.web('%s #de [1]' % 'düsseldorf'.decode('utf-8'))    
+    assert_true(re.search(r"Web search for d\xfcsseldorf", result1), 'no result title found')    
+    assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result1), 'no result found')    
+    assert_equal(result0, result1, 'first page invalid')    
+    
+    result2 = xmmp.web('%s #de [2]' % 'düsseldorf'.decode('utf-8'))    
+    assert_true(re.search(r"Web search for d\xfcsseldorf", result2), 'no result title found')    
+    assert_not_equal(result0, result2, 'no second page')    
+    
+    resultNone = xmmp.web('%s #de []' % 'düsseldorf'.decode('utf-8'))    
+    assert_true(re.search(r"Web search for d\xfcsseldorf", resultNone), 'no result title found')    
+    assert_not_equal(result0, resultNone, 'not default first page') 
 
 def test_wave_gweb():   
     result = wave.web('%s #de' % 'düsseldorf'.decode('utf-8'))    
@@ -26,7 +53,12 @@ def test_wave_gweb():
 def test_xmmp_gnews():   
     result = xmmp.news('%s #de' % 'düsseldorf'.decode('utf-8')) 
     assert_true(re.search(r"Google news search for d\xfcsseldorf", result), 'no result title found') 
-    assert_true(re.search(r'http://', result), 'no result link found')    
+    assert_true(re.search(r'http://', result), 'no result link found')  
+
+    result1 = xmmp.news('%s #de [2]' % 'düsseldorf'.decode('utf-8')) 
+    assert_true(re.search(r"Google news search for d\xfcsseldorf", result), 'no result title found') 
+    assert_not_equal(result, result1, 'second page invalid')    
+    
 
 def test_wave_gnews():   
     result = wave.news('%s #de' % 'düsseldorf'.decode('utf-8')) 
@@ -53,7 +85,11 @@ def test_xmmp_imdb():
     result = xmmp.imdb('Bastards #en') 
     assert_true(re.search(r'Results on IMDb for "Bastards"', result), 'no result title found') 
     assert_true(re.search(r'Bastards of the Party \(2005\)', result), 'no hit found')
-    assert_true(re.search(r'http://', result), 'no result link found')    
+    assert_true(re.search(r'http://', result), 'no result link found')  
+    
+    result1 = xmmp.imdb('Bastards #en [3]') 
+    assert_true(re.search(r'Results on IMDb for "Bastards"', result), 'no result title found') 
+    assert_not_equal(result, result1, 'third page invalid')    
 
 def test_wave_imdb():   
     result = wave.imdb('%s #de' % 'Köln'.decode('utf-8')) 
@@ -66,10 +102,15 @@ def test_xmmp_wpedia():
     result = xmmp.wikipedia('Madrid #es') 
     assert_true(re.search(r'Wikipedia entries for "Madrid"', result), 'no result title found') 
     assert_true(re.search(r'Madrid - Wikipedia, la enciclopedia libre', result), 'no hit found')
-    assert_true(re.search(r'http://', result), 'no result link found')    
+    assert_true(re.search(r'http://', result), 'no result link found')        
 
 def test_wave_wpedia():   
     result = wave.wikipedia('%s #de' % 'Köln'.decode('utf-8')) 
     assert_true(re.search(r'<br/><br/><b>Wikipedia entries for "K\xf6ln"', result), 
         'no result title found')    
     assert_true(re.search(r'http://de.wikipedia.org/wiki/', result),'no result found')
+    
+    result1 = wave.wikipedia('%s #de [2]' % 'Köln'.decode('utf-8')) 
+    assert_true(re.search(r'<br/><br/><b>Wikipedia entries for "K\xf6ln"', result), 
+        'no result title found')    
+    assert_not_equal(result, result1, 'second page invalid')      
