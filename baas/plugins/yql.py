@@ -172,7 +172,7 @@ web:xmpp #de'''
         result = title+"\n"
         if hits:
             for row in hits:
-                result += "%s : %s\n" % (row['title'].replace('Blip.fm | ',''),row['url'])
+                result += "%s : %s\n" % (row['title'].replace('Blip.fm | ','').replace('Listen to ',''),row['url'])
         else:
             result +='No blips found!'
         return strip_tags(result)
@@ -184,7 +184,7 @@ web:xmpp #de'''
         result = " <br/><br/><b>%s</b><br/>" % xmlify(title)
         if hits:
             for row in hits:
-                title = xmlify(row['title'])
+                title = xmlify(row['title'].replace('Listen to ',''))
                 result += '<a href="%s">%s</a><br/>' % (xmlify(row['url']), title)
         else:
             result +='No blips found!'
