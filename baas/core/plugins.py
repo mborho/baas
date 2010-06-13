@@ -93,10 +93,10 @@ class Plugin(object):
             extract optional page paramter from term
         """
         page = 1
-        pgrep = re.search('.*\[([0-9]+)]$', term)
+        pgrep = re.search('.*\[([0-9]+)\][^\]]*$', term)
         if pgrep:
             page_num = int(pgrep.group(1))
-            term = term[0:-len('[%d]' % page_num)].strip()
+            term = term.replace('[%d]' % page_num,'').strip()
             if page_num > 0:
                 page = page_num
         return (term, page)

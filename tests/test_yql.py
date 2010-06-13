@@ -22,7 +22,7 @@ def test_xmmp_limits():
     assert_true(re.search(r"Searching the web for d\xfcsseldorf", result0), 'no result title found')    
     assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result0), 'no result found')    
     
-    result1 = newsXmmp.search_web('%s #de [1]' % 'düsseldorf'.decode('utf-8'))    
+    result1 = newsXmmp.search_web('%s [1] #de ' % 'düsseldorf'.decode('utf-8'))    
     assert_true(re.search(r"Searching the web for d\xfcsseldorf", result1), 'no result title found')    
     assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result0), 'no result found')    
     assert_equal(result0, result1, 'first page invalid')    

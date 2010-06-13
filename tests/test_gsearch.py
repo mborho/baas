@@ -25,11 +25,11 @@ def test_xmmp_gweb():
 
 def test_xmmp_limits():   
     # test several page params
-    result0 = xmmp.web('%s #de [0]' % 'düsseldorf'.decode('utf-8'))    
+    result0 = xmmp.web('%s #de [0]' % 'düsseldorf'.decode('utf-8')) 
     assert_true(re.search(r"Web search for d\xfcsseldorf", result0), 'no result title found')    
     assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result0), 'no result found')    
     
-    result1 = xmmp.web('%s #de [1]' % 'düsseldorf'.decode('utf-8'))    
+    result1 = xmmp.web('%s [1] #de ' % 'düsseldorf'.decode('utf-8'))    
     assert_true(re.search(r"Web search for d\xfcsseldorf", result1), 'no result title found')    
     assert_true(re.search(r'Landeshauptstadt D\xfcsseldorf', result1), 'no result found')    
     assert_equal(result0, result1, 'first page invalid')    
