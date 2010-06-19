@@ -31,6 +31,7 @@ class Delicious (Plugin):
         if term and term.find('#')+1:
             term, order = term.split('#',1)
             term = term.strip()
+            order = order.strip()
             
         if term == '':
             return "Please specify your url to lookup"
@@ -39,7 +40,7 @@ class Delicious (Plugin):
         if order == "pop":
             table += '.popular'
 
-        query = 'select * from %s where tag="%s" limit 10' % (table, term)
+        query = 'select * from %s (15) where tag="%s"' % (table, term)
 
         yql_api = YQLApi(community=True)
         response =yql_api.request(query)        
