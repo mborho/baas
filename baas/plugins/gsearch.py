@@ -27,7 +27,8 @@ class Gsearch (Plugin):
             ('gweb', self.web),
             ('metacritic', self.metacritic),
             ('imdb', self.imdb),
-            ('wikipedia', self.wikipedia)]
+            ('wikipedia', self.wikipedia),
+            ('amazon', self.amazon)]
         return cmd_map
 
     def get_limits(self):
@@ -40,7 +41,8 @@ class Gsearch (Plugin):
             ('gweb', self.result_limit),
             ('metacritic', self.result_limit),
             ('imdb', self.result_limit),
-            ('wikipedia', self.result_limit)]
+            ('wikipedia', self.result_limit),
+            ('amazon', self.result_limit)]
         return limit_map
         
     def get_help(self):
@@ -52,6 +54,7 @@ gnews:hamburg #de
 gweb:xmpp #de
 
 IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
+Amazon search with #com, #co.uk, #co.jp, #cn, #de, #ca, #at or #fr
 The different wikipedia versions can be selected via #en, #de, #fr etc.'''
 
         return {
@@ -60,7 +63,8 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 'gweb:word - google web search',
                 'metacritic:title - search for reviews on metacritc.com',
                 'imdb:title - search for movie on IMDb',
-                'wikipedia:thing - search on wikipedia'],
+                'wikipedia:thing - search on wikipedia',
+                'amazon:product - search for products on amazon'],
             'additional': [additional],
         }
 
@@ -235,7 +239,36 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
         return self.render(data=hits, title=title)    
 
 
+    def amazon(self, term):
+        '''
+        searches metacritic
+        '''
+        term = term.strip()
 
+        lang = None
+
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
+
+        tld = lang if lang and lang != 'en' else 'com' 
+
+        query = 'site:amazon.%s " %s' % (tld, self._build_query_term(term))
+        params = {
+                'v':'1.0', 
+                'q':query.encode('utf-8').lower(),
+                'rsz':'large',
+                'start':(page-1)*self.result_limit                
+                }
+       
+        response = self._api_request('web', params)
+        hits = self._extract_hits(response)
+
+        title = 'Products on Amazon for "%s"\n' % term
+        return self.render(data=hits, title=title) 
+        
     def render_xmpp(self, hits, title):
         '''
         renders the result for xmpp responses

@@ -88,7 +88,7 @@ def test_xmmp_imdb():
     assert_true(re.search(r'http://', result), 'no result link found')  
     
     result1 = xmmp.imdb('Bastards #en [3]') 
-    assert_true(re.search(r'Results on IMDb for "Bastards"', result), 'no result title found') 
+    assert_true(re.search(r'Results on IMDb for "Bastards"', result1), 'no result title found') 
     assert_not_equal(result, result1, 'third page invalid')    
 
 def test_wave_imdb():   
@@ -111,6 +111,18 @@ def test_wave_wpedia():
     assert_true(re.search(r'http://de.wikipedia.org/wiki/', result),'no result found')
     
     result1 = wave.wikipedia('%s #de [2]' % 'Köln'.decode('utf-8')) 
-    assert_true(re.search(r'<br/><br/><b>Wikipedia entries for "K\xf6ln"', result), 
+    assert_true(re.search(r'<br/><br/><b>Wikipedia entries for "K\xf6ln"', result1), 
         'no result title found')    
-    assert_not_equal(result, result1, 'second page invalid')      
+    assert_not_equal(result, result1, 'second page invalid')   
+    
+#tests for imdb
+def test_xmmp_amazon():   
+    result = xmmp.amazon('n900 #de') 
+    assert_true(re.search(r'Products on Amazon for "n900"', result), 'no result title found') 
+    assert_true(re.search(r'Nokia N900 Smartphone black: Amazon.de: Elektronik', result), 'no hit found')
+    assert_true(re.search(r'http://', result), 'no result link found')  
+    
+    result1 = xmmp.amazon('n900 #de [2]') 
+    assert_true(re.search(r'Products on Amazon for "n900"', result1), 'no result title found') 
+    assert_false(re.search(r'Nokia N900 Smartphone black: Amazon.de: Elektronik', result1), 'no hit found')
+    assert_not_equal(result, result1, 'second page invalid')        
