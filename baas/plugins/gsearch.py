@@ -64,7 +64,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 'metacritic:title - search for reviews on metacritc.com',
                 'imdb:title - search for movie on IMDb',
                 'wikipedia:thing - search on wikipedia',
-                'amazon:product - search for products on amazon'],
+                'amazon: product - search for products on amazon'],
             'additional': [additional],
         }
 
