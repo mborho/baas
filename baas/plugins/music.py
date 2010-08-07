@@ -47,11 +47,6 @@ music:dog #track'''
         if isinstance(artist, list): artist = artist[0]
         return artist
 
-    def _get_artist(self, row):
-        artist = row.get('Artist',{})
-        if isinstance(artist, list): artist = artist[0]
-        return artist
-
     def _extract_hits(self, result, name):
         hits = result.get(name) if result else None    
         # handle single result
