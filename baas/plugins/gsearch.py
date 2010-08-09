@@ -255,7 +255,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
 
         tld = lang if lang and lang != 'en' else 'com' 
 
-        query = 'site:amazon.%s " %s' % (tld, self._build_query_term(term))
+        query = 'site:www.amazon.%s " %s' % (tld, self._build_query_term(term))
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
