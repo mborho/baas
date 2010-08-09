@@ -253,7 +253,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 term, lang = term.split('#',1)
                 term = term.strip()
 
-        tld = lang if lang and lang != 'en' else 'com' 
+        tld = lang if lang else 'com' 
 
         query = 'site:www.amazon.%s " %s' % (tld, self._build_query_term(term))
         params = {
@@ -262,7 +262,11 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 'rsz':'large',
                 'start':(page-1)*self.result_limit                
                 }
-       
+
+        tld_lang_map = { 'co.uk':'lang_en','com':'lang_en', 'fr':'lang_fr',
+                            'de':'lang_de', 'co.jp':'lang_ja'}
+        params['lr'] = tld_lang_map.get(lang,'')            
+
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
