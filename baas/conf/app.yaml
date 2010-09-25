@@ -10,6 +10,8 @@ handlers:
   static_dir: baas/appengine/static
 - url: /_ah/xmpp/message/chat/.*
   script: baas/appengine/bot_xmpp.py
+- url: /api
+  script: baas/appengine/bot_api.py
 
 inbound_services:
 - xmpp_message
