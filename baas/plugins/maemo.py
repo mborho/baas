@@ -22,11 +22,7 @@ class Maemo (Plugin):
         """
             returns the command map for the plugin
         """
-        cmd_map = [
-                ('maemo-talk',self.talk),
-                ('maemo-packages',self.packages),
-                ('maemo-wiki',self.wiki)
-                ]
+        cmd_map = [('maemo',self.search)]
         return cmd_map
 
     def get_limits(self):
@@ -34,22 +30,16 @@ class Maemo (Plugin):
             returns the limit map for the plugin commands
             for e.g. several result pages
         """
-        limit_map = [('maemo-talk',self.result_limit)]
+        limit_map = [('maemo',self.result_limit)]
         return limit_map
         
     def get_help(self):
         """
             returns the help text for the plugin
         """
-        additional = ''
-
         return {
-            'commands': [
-                'maemo-talk - talk.maemo.org search',
-                'maemo-packages:name - search for maemo packages',
-                'maemo-wiki:word - wiki.maemo.org search'
-            ],
-            'additional': [additional],
+            'commands': ['maemo:word [#talk, #packages or #wiki] - maemo.org search'],
+            'additional': [''],
         }
 
     def _api_request(self, mode, params):
@@ -78,17 +68,29 @@ class Maemo (Plugin):
     def _build_query_term(self, term):
         return 'intitle:' + ' intitle:'.join(term.split())+' '
 
-    def talk(self, term):
+    def search(self, term):
         '''
         searches metacritic
         '''
         term = term.strip()
-        lang = 'en'
+        what = 'talk'
 
         if term:
             (term, page) = self.extract_page_param(term)                            
-
-        query = 'site:talk.maemo.org inurl:showthread.php %s' % (term)
+            if term.find('#')+1:
+                term, what = term.split('#',1)
+                term = term.strip()
+                
+        if what == 'wiki':
+            query = 'site:wiki.maemo.org %s' % (term)
+            title = 'Wiki entries about %s\n' % term
+        elif what == 'packages':
+            query = 'site:maemo.org inurl:/packages/view/ %s' % (term)
+            title = 'Packages for %s\n' % term
+        else:
+            query = 'site:talk.maemo.org inurl:showthread.php %s' % (term)
+            title = 'Postings about %s\n' % term
+        
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
@@ -99,57 +101,8 @@ class Maemo (Plugin):
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
-        title = 'talk.maemo.org hits for %s\n' % term
         return self.render(data=hits, title=title)   
-        
-    def packages(self, term):
-        '''
-        searches metacritic
-        '''
-        term = term.strip()
-        lang = 'en'
-
-        if term:
-            (term, page) = self.extract_page_param(term)                            
-
-        query = 'site:maemo.org inurl:/packages/view/ %s' % (term)
-        params = {
-                'v':'1.0', 
-                'q':query.encode('utf-8').lower(),
-                'rsz':'large',
-                'start':(page-1)*self.result_limit
-                }
-       
-        response = self._api_request('web', params)
-        hits = self._extract_hits(response)
-
-        title = 'Maemo packages for %s\n' % term
-        return self.render(data=hits, title=title)          
-        
-    def wiki(self, term):
-        '''
-        searches metacritic
-        '''
-        term = term.strip()
-        lang = 'en'
-
-        if term:
-            (term, page) = self.extract_page_param(term)                            
-
-        query = 'site:wiki.maemo.org %s' % (term)
-        params = {
-                'v':'1.0', 
-                'q':query.encode('utf-8').lower(),
-                'rsz':'large',
-                'start':(page-1)*self.result_limit
-                }
-       
-        response = self._api_request('web', params)
-        hits = self._extract_hits(response)
-
-        title = 'wiki.maemo.org hits for %s\n' % term
-        return self.render(data=hits, title=title)   
-        
+                
     def render_xmpp(self, hits, title):
         '''
         renders the result for xmpp responses
