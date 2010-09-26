@@ -85,7 +85,7 @@ class Maemo (Plugin):
             query = 'site:wiki.maemo.org %s' % (term)
             title = 'Wiki entries about %s\n' % term
         elif what == 'packages':
-            query = 'site:maemo.org inurl:/packages/view/ %s' % (term)
+            query = 'site:maemo.org inurl:/packages/view/ %s' % (self._build_query_term(term))
             title = 'Packages for %s\n' % term
         else:
             query = 'site:talk.maemo.org inurl:showthread.php %s' % (term)
