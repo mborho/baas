@@ -4,10 +4,14 @@
 # GPL - see License.txt for details
 import logging
 import ConfigParser
+from urllib import unquote, quote
 from baas.core.plugins import PluginLoader
 from baas.core.helpers import *
+from django.utils import simplejson
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 config = ConfigParser.ConfigParser()
 config.read("../../baas.cfg")
@@ -18,7 +22,7 @@ pluginHnd.load_map()
 pluginHnd.load_help()
 commands= pluginHnd.commands
 
-class ApiHandler(webapp.RequestHandler):
+class QueryHandler(webapp.RequestHandler):
 
     def get(self):
         term = self.request.get('term')
@@ -35,15 +39,28 @@ class ApiHandler(webapp.RequestHandler):
                     reply = '{"error":"service unknown"}'
             elif term and term == 'help':
                 reply += '{"help":pluginHnd.help}'
-
+            else:
+                reply = '{"error":"service unknown"}'
         except Exception, e:
             logging.exception(e)
+            reply = '{"error":"%s"}' % quote(unicode(e))
         
         if json_mime:
             self.response.headers['Content-Type'] = 'application/json charset=utf-8'
         self.response.out.write(reply)
 
-application = webapp.WSGIApplication([('/api',ApiHandler)],debug=True)
+class ServicesHandler(webapp.RequestHandler):
+
+    def get(self):
+        logging.info(commands.keys())
+        if self.request.get('json', True):
+            self.response.headers['Content-Type'] = 'application/json charset=utf-8'
+        self.response.out.write(simplejson.dumps(commands.keys()))
+        
+application = webapp.WSGIApplication([
+                ('/api/query',QueryHandler),
+                ('/api/services', ServicesHandler),    
+                ],debug=True)
 
 def main():
   run_wsgi_app(application)
