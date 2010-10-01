@@ -3,7 +3,7 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 import urllib
-import urllib2
+from baas.core.helpers import load_url
 
 try:
     # appengine
@@ -35,10 +35,9 @@ class YQLApi(object):
         if self.community:            
             final_url += '&env='+urllib.quote_plus('store://datatables.org/alltableswithkeys')       
 
-        req = urllib2.Request(final_url)
-        response = urllib2.urlopen(req)
-
-        api_data=simplejson.load(response)
+        response = load_url(final_url)
+        
+        api_data=simplejson.loads(response)
         result = api_data.get('query',{}).get('results',{})
 
         return result

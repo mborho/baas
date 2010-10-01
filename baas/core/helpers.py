@@ -2,6 +2,8 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 import re
+import feedparser
+import urllib2
 from htmlentitydefs import name2codepoint as n2cp
 from datetime import datetime
 
@@ -50,3 +52,21 @@ def htmlentities_decode(string):
     """ thanks to http://snippets.dzone.com/posts/show/4569 """
     entity_re = re.compile(r'&(#?)(x?)(\d{1,5}|\w{1,8});')
     return entity_re.subn(substitute_entity, string)[0]
+    
+    
+
+def load_url(url):
+    """ 
+        loads an url   
+    """
+    
+    req = urllib2.Request(url)
+    response = urllib2.urlopen(req).read()
+    return response
+    
+def load_feed(url):
+    """
+        loads extenal rss/atom feed
+    """
+    xml = load_url(url)
+    return feedparser.parse(xml)

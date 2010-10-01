@@ -3,10 +3,9 @@
 # GPL - see License.txt for details
 import os
 import new
-import feedparser
 import re
 from baas import plugins
-from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode, load_url, load_feed
 
 
 class PluginLoader(object):
@@ -112,12 +111,6 @@ class Plugin(object):
            makes a string xml valid
         """
         return xmlify(string)
-
-    def load_feed(self, url):
-        """
-            loads extenal rss/atom feed
-        """
-        return feedparser.parse(url)
 
     def htmlentities_decode(self, string):
         """ 

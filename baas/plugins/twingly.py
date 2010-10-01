@@ -3,7 +3,7 @@
 # GPL - see License.txt for details
 from urllib import quote_plus
 from baas.core.plugins import Plugin
-from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode, load_feed
 
 class Twingly(Plugin):
 
@@ -27,8 +27,7 @@ class Twingly(Plugin):
             return "Please specify your search term"
 
         twingly_rss = "http://www.twingly.com/search.rss?q=%s&sort=published&content=%s"  % (quote_plus(term.encode('utf-8')), content)
-
-        feed = self.load_feed(twingly_rss)
+        feed = load_feed(twingly_rss)
 
         if content == 'blog': limit = 5
         else: limit = 10

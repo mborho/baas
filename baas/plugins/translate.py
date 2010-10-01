@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
-import urllib2
 import re
 from urllib import quote_plus
 from baas.core.plugins import Plugin
-from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode, load_url
 
 try:
     # appengine
@@ -40,8 +39,7 @@ tlate:How do you do? #de'''
             url_term = quote_plus(term.encode('utf-8').lower())
             api_url = 'http://www.google.com/uds/Gtranslate?context=22&q=%s&langpair=%s|%s&key=notsupplied&v=1.0' % (url_term, source_lang, target_lang)
 
-            req = urllib2.Request(api_url)
-            response = urllib2.urlopen(req).read()
+            response = load_url(api_url)
             api_response  = simplejson.loads(response)
 
             if api_response.get('responseStatus') == 200:

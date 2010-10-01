@@ -2,9 +2,8 @@
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
 from urllib import urlencode, quote_plus
-import urllib2
 from baas.core.plugins import Plugin
-from baas.core.helpers import strip_tags, xmlify, htmlentities_decode
+from baas.core.helpers import strip_tags, xmlify, htmlentities_decode, load_url
 
 try:
     # appengine
@@ -47,8 +46,7 @@ class Maemo (Plugin):
         url_params = urlencode( params )
         api_url = 'http://ajax.googleapis.com/ajax/services/search/'+mode+'?%s' % (url_params)
 
-        req = urllib2.Request(api_url)
-        response = urllib2.urlopen(req).read()
+        response = load_url(api_url)
         api_response  = simplejson.loads(response)
         if api_response.get('responseStatus') == 200:
             return api_response

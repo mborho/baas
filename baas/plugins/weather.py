@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 # Copyright 2009 Martin Borho <martin@borho.net>
 # GPL - see License.txt for details
-import urllib2
 import urllib
 import re
 from urllib import quote_plus
 from xml.dom import minidom
 from xml.etree import ElementTree
 from baas.core.plugins import Plugin
-from baas.core.helpers import strip_tags, htmlentities_decode
+from baas.core.helpers import strip_tags, htmlentities_decode, load_url
 
 try:
     # appengine
@@ -54,8 +53,7 @@ class Weather(Plugin):
             
             api_url = 'http://www.google.de/ig/api?%s' % (url_term)
 
-            req = urllib2.Request(api_url)
-            response = urllib2.urlopen(req).read()
+            response = load_url(api_url)
             if response:
                 response = self._fix_invalid_xml(response)
                 weather = ElementTree.fromstring(response)
