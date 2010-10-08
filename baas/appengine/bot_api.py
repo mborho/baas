@@ -26,6 +26,7 @@ class QueryHandler(webapp.RequestHandler):
 
     def get(self):
         term = self.request.get('term')
+        json_callback = self.request.get('jsoncallback')
         json_mime = self.request.get('json', True)
         reply = ''
         try:
@@ -47,7 +48,7 @@ class QueryHandler(webapp.RequestHandler):
         
         if json_mime:
             self.response.headers['Content-Type'] = 'application/json charset=utf-8'
-        self.response.out.write(reply)
+        self.response.out.write('%s (%s)' % (json_callback, simplejson.dumps(reply))) 
 
 class ServicesHandler(webapp.RequestHandler):
 
