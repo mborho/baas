@@ -76,13 +76,13 @@ def test_xmmp_blip():
     assert_true(re.search(r'blip\.fm/profile/', result), 'no result link found')    
 
 def test_wave_blip():   
-    result = newsWave.search_blip('grönemeyer'.decode('utf-8')) 
-    assert_true(re.search(r"<br/><br/><b>Blips for gr\xf6nemeyer", result), 
+    result = newsWave.search_blip('köln'.decode('utf-8')) 
+    assert_true(re.search(r"<br/><br/><b>Blips for k\xf6ln", result), 
         'no result title found')    
-    assert_true(re.search(r'">[^<]*Herbert Gr\xf6nemeyer[^<]*</a>', result),
+    assert_true(re.search(r'">[^<]*K\xf6ln[^<]*</a>', result),
         'no result found')
         
-    result1 = newsWave.search_blip('grönemeyer [2]'.decode('utf-8')) 
-    assert_true(re.search(r"<br/><br/><b>Blips for gr\xf6nemeyer", result1), 
+    result1 = newsWave.search_blip('köln [2]'.decode('utf-8')) 
+    assert_true(re.search(r"<br/><br/><b>Blips for k\xf6ln", result1), 
         'no result title found')    
     assert_not_equal(result, result1, 'second page invalid')          
