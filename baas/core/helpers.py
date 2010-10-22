@@ -7,6 +7,13 @@ import urllib2
 from htmlentitydefs import name2codepoint as n2cp
 from datetime import datetime
 
+# extend timeout when on appengine
+try:
+    from google.appengine.api import urlfetch
+    _on_appengine = True
+except:    
+    _on_appengine = False
+    
 xml_escapes = {
     '&' : '&amp;',
     '>' : '&gt;',
@@ -59,9 +66,11 @@ def load_url(url):
     """ 
         loads an url   
     """
-    
     req = urllib2.Request(url)
-    response = urllib2.urlopen(req).read()
+    if _on_appengine:
+        response = urllib2.urlopen(req).read()
+    else:
+        response = urllib2.urlopen(req,None,_timeout).read()    
     return response
     
 def load_feed(url):
