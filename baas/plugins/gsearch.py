@@ -27,6 +27,7 @@ class Gsearch (Plugin):
             ('metacritic', self.metacritic),
             ('imdb', self.imdb),
             ('wikipedia', self.wikipedia),
+            ('wiktionary', self.wiktionary),
             ('amazon', self.amazon)]
         return cmd_map
 
@@ -41,6 +42,7 @@ class Gsearch (Plugin):
             ('metacritic', self.result_limit),
             ('imdb', self.result_limit),
             ('wikipedia', self.result_limit),
+            ('wiktionary', self.result_limit),
             ('amazon', self.result_limit)]
         return limit_map
         
@@ -54,7 +56,7 @@ gweb:xmpp #de
 
 IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
 Amazon search with #com, #co.uk, #co.jp, #cn, #de, #ca, #at or #fr
-The different wikipedia versions can be selected via #en, #de, #fr etc.'''
+The different wikipedia or wiktionary versions can be selected via #en, #de, #fr etc.'''
 
         return {
             'commands': [
@@ -63,6 +65,7 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 'metacritic:title - search for reviews on metacritc.com',
                 'imdb:title - search for movie on IMDb',
                 'wikipedia:thing - search on wikipedia',
+                'wiktionary:word - search on wiktionary',
                 'amazon: product - search for products on amazon'],
             'additional': [additional],
         }
@@ -223,6 +226,33 @@ The different wikipedia versions can be selected via #en, #de, #fr etc.'''
                 term = term.strip()
 
         query = 'site:%s.wikipedia.org inurl:"/wiki/" %s' % (lang, term)
+        params = {
+                'v':'1.0', 
+                'q':query.encode('utf-8').lower(),
+                'rsz':'large',
+                'start':(page-1)*self.result_limit
+                }
+       
+        response = self._api_request('web', params)
+        hits = self._extract_hits(response)
+
+        title = 'Wikipedia entries for "%s"\n' % term
+        return self.render(data=hits, title=title)    
+
+    def wiktionary(self, term):
+        '''
+        searches metacritic
+        '''
+        term = term.strip()
+        lang = 'en'
+
+        if term:
+            (term, page) = self.extract_page_param(term)                            
+            if term.find('#')+1:
+                term, lang = term.split('#',1)
+                term = term.strip()
+
+        query = 'site:%s.wiktionary.org inurl:"/wiki/" %s' % (lang, term)
         params = {
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),

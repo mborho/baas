@@ -34,6 +34,7 @@ gweb:word - google web search
 metacritic:title - search for reviews on metacritc.com
 imdb:title - search for movie on IMDb
 wikipedia:thing - search on wikipedia
+wiktionary:word - search on wiktionary
 tlate:word [@source] [#target] - translates the word from @source in @target, default #target is english
 example:foo - gives you a bla for a foo
 blog:word - blog search via twingly
@@ -49,7 +50,7 @@ gnews:hamburg #de
 gweb:xmpp #de
 
 IMDb search can be narrowed down with #en, #de, #es, #pt, #it or #fr
-The different wikipedia versions can be selected via #en, #de, #fr etc.
+The different wikipedia or wiktionary versions can be selected via #en, #de, #fr etc.
 
 A translation can have the source (@) and the target (#) language specified by tags
 tlate:Wie gehts?  @de #en

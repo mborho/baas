@@ -49,7 +49,9 @@
       <span class="small">by <a href="http://github.com/mborho">mborho</a></span></h1>
 
     <div class="description">
-      <p>"Buddy as a Service" is a jabber/wave robot, using Yahoo YQL API, Google API and other services to do searches (web, news, reviews, wikipedia, imdb, music) and some other stuff (translations, weather forecast, etc) for you.</p>
+      <p>"Buddy as a Service" is a jabber/wave robot, using Yahoo YQL
+API, Google API and other services to do searches (web, news, reviews,
+wikipedia, wiktionary, imdb, music) and some other stuff (translations, weather forecast, etc) for you.</p>
      <p>The XMPP bot also runs on the google appengine. BaaS is easy extensible through plugins. No API-Keys are required!</p>
         <p>There is an app build for maemo/n900 mobile devie based on BaaS: <a href="http://maemo.org/downloads/product/Maemo5/ask-ziggy/">Ask Ziggy</a></p>
     </div>
@@ -85,6 +87,7 @@ type '<b>help</b>' for available commands<br/>
 <b>metacritic:title</b> - search for reviews on metacritc.com<br/>
 <b>imdb:title</b> - search for movie on IMDb<br/>
 <b>wikipedia:thing</b> - search on wikipedia<br/>
+<b>wiktionary:word</b> - search on wiktionary<br/>
 <b>tlate:word [@source] [#target]</b> - translates the word from @source in @target, default #target is english<br/>
 <b>example:foo</b> - gives you a bla for a foo<br/>
 <b>blog:word</b> - blog search via twingly<br/>
@@ -100,7 +103,7 @@ gnews and gweb can be also combined with lang-codes, like <b>#de</b>, <b>#en</b>
 <b>gweb:xmpp #de</b><br/>
 <br/>
 <b>IMDb</b> search can be narrowed down with <b>#en, #de, #es, #pt, #it</b> or <b>#fr</b><br/>
-The different <b>wikipedia</b> versions can be selected via <b>#en, #de, #fr</b> etc.<br/>
+The different <b>wikipedia</b> or <b>wiktionary</b> versions can be selected via <b>#en, #de, #fr</b> etc.<br/>
 <br/>
 A translation can have the source (@) and the target (#) language specified by tags<br/>
 <b>tlate:Wie gehts?  @de #en</b><br/>
