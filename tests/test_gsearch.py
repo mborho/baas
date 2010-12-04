@@ -13,7 +13,7 @@ raw = pluginRaw.plugins.get('Gsearch')
 def test_limits():    
     assert_equal(8, raw.result_limit,  'result size incorrect')    
     for cmd in pluginRaw.limits:
-        if cmd not in  ['gnews','wikipedia','gweb','metacritic','imdb']: continue
+        if cmd not in  ['gnews','wikipedia','wiktionary','gweb','metacritic','imdb']: continue
         assert_equal(pluginRaw.limits[cmd], raw.result_limit ,'result_size for %s incorrect' % cmd)        
     
 #tests for web search
@@ -114,7 +114,26 @@ def test_wave_wpedia():
     assert_true(re.search(r'<br/><br/><b>Wikipedia entries for "K\xf6ln"', result1), 
         'no result title found')    
     assert_not_equal(result, result1, 'second page invalid')   
+
+#tests for wiktionary
+def test_xmmp_wiktionary():   
+    result = xmmp.wiktionary('Saucisse #fr') 
+    assert_true(re.search(r'Wiktionary entries for "Saucisse"', result), 'no result title found') 
+    assert_true(re.search(r'Wiktionnaire - Wikipedia, la enciclopedia libr', result), 'no hit found')
+    assert_true(re.search(r'http://', result), 'no result link found')        
+
+def test_wave_wiktionary():   
+    result = wave.wiktionary('%s #fr' % 'été'.decode('utf-8')) 
+    assert_true(re.search(r'<br/><br/><b>Wiktionary entries for "\xe9t\xe9"', result), 
+        'no result title found')    
+    assert_true(re.search(r'http://fr.wiktionary.org/wiki/', result),'no result found')
     
+    result1 = wave.wiktionary('%s #fr [2]' % 'été'.decode('utf-8')) 
+    assert_true(re.search(r'<br/><br/><b>Wiktionary entries for "\xe9t\xe9"', result1), 
+        'no result title found')    
+    assert_not_equal(result, result1, 'second page invalid')   
+
+
 #tests for imdb
 def test_xmmp_amazon():   
     result = xmmp.amazon('n900 #de') 
