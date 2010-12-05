@@ -257,9 +257,11 @@ The different wikipedia or wiktionary versions can be selected via #en, #de, #fr
                 'v':'1.0', 
                 'q':query.encode('utf-8').lower(),
                 'rsz':'large',
-                'start':(page-1)*self.result_limit
+                'start':(page-1)*self.result_limit,
+                'hl':lang,
+                'gl':lang
                 }
-       
+
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
