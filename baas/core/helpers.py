@@ -70,7 +70,7 @@ def load_url(url):
     if not _on_appengine:
         response = urllib2.urlopen(req).read()
     else:
-        response = urllib2.urlopen(req,None,_timeout).read()    
+        response = urllib2.urlopen(req,None,10).read()    
     return response
     
 def load_feed(url):
