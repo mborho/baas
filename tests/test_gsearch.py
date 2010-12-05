@@ -119,7 +119,7 @@ def test_wave_wpedia():
 def test_xmmp_wiktionary():   
     result = xmmp.wiktionary('Saucisse #fr') 
     assert_true(re.search(r'Wiktionary entries for "Saucisse"', result), 'no result title found') 
-    assert_true(re.search(r'Wiktionnaire - Wikipedia, la enciclopedia libr', result), 'no hit found')
+    assert_true(re.search(r'saucisse - Wiktionnaire - http://fr.wiktionary.org/wiki/saucisse', result), 'no hit found')
     assert_true(re.search(r'http://', result), 'no result link found')        
 
 def test_wave_wiktionary():   

@@ -263,7 +263,7 @@ The different wikipedia or wiktionary versions can be selected via #en, #de, #fr
         response = self._api_request('web', params)
         hits = self._extract_hits(response)
 
-        title = 'Wikipedia entries for "%s"\n' % term
+        title = 'Wiktionary entries for "%s"\n' % term
         return self.render(data=hits, title=title)    
 
 

@@ -67,7 +67,7 @@ def load_url(url):
         loads an url   
     """
     req = urllib2.Request(url)
-    if _on_appengine:
+    if not _on_appengine:
         response = urllib2.urlopen(req).read()
     else:
         response = urllib2.urlopen(req,None,_timeout).read()    
