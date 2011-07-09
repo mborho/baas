@@ -20,8 +20,8 @@ def test_wave_de_en():
 #tests for german_spain
 def test_xmmp_de_es():   
     result = xmmp.translate('üben @de #es'.decode('utf-8')) 
-    assert result == 'la práctica (de => es)'.decode('utf-8')  
+    assert result == 'práctica (de => es)'.decode('utf-8')  
 
 def test_wave_de_es():   
     result = wave.translate('üben @de #es'.decode('utf-8')) 
-    assert result == ' <br/><br/><b>la práctica</b> <i>(de =&gt; es)</i>'.decode('utf-8')  
+    assert result == ' <br/><br/><b>práctica</b> <i>(de =&gt; es)</i>'.decode('utf-8')  
